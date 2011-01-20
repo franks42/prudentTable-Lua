@@ -1,9 +1,10 @@
---[[
-prudentTable.lua
---]]
+-------------------------------------------------------------------------------
+-- prudentTable.lua.
+-------------------------------------------------------------------------------
 
 local prudentTable = {}
 
+-------------------------------------------------------------------------------
 -- weak table for representing proxied storage tables.
 local data = setmetatable({}, {__mode = 'k'})
 
@@ -36,7 +37,7 @@ end
 --local weak-table to maintain the registered default array-values for tables
 local arrayDefaultT = setmetatable({}, {__mode = 'k'})
 
---- A default array value dv is registered for the table t.
+--- Register a default array value dv for table t.
 --@param t table
 --@param dv Any value (default for default is nil - also used to "reset")
 --@return unmodified table t
@@ -46,7 +47,7 @@ function prudentTable.setArrayDefault(t,dv)
 end
 local setArrayDefault = prudentTable.setArrayDefault
 
---- For table t, returns the registered default array value.
+--- Returns the registered default array value for table t
 --@param t table
 --@return Registered value (any type - nil is default)
 function prudentTable.getArrayDefault(t)
@@ -63,7 +64,7 @@ local getArrayDefault = prudentTable.getArrayDefault
 --local weak-table to maintain the registered permanent keys for tables
 local permKeysT = setmetatable({}, {__mode = 'k'})
 
---- For table t, the list of keys are registered as permanent keys.
+--- Register one or more keys as permanent keys for table t.
 --@param t table
 --@param ... one or more keys (anything but nil)
 --@return unmodified table t
@@ -80,7 +81,7 @@ function prudentTable.setPermKey(t,...)
 end
 local setPermKey = prudentTable.setPermKey
 
---- For table t, key pk is unregistered as a permanent key.
+--- Unregister/remove key pk as a permanent key for table t.
 --@param t table
 --@param pk key (anything but nil)
 --@return unmodified table t
@@ -92,7 +93,7 @@ function prudentTable.removePermKey(t,pk)
 end
 local removePermKey = prudentTable.removePermKey
 
---- For table t, returns whether key k is registered as a permanent key.
+--- Returns whether key k is registered as a permanent key for table t.
 --@param t table
 --@param pk key (anything but nil)
 --@return Boolean
@@ -102,7 +103,7 @@ function prudentTable.isPermKey(t,k)
 end
 local isPermKey = prudentTable.isPermKey
 
---- For table t, returns a list of all registered permanent keys
+--- Returns a list of all registered permanent keys for table t.
 --@param t table
 --@return List of keys
 function prudentTable.permKeys(t)
@@ -127,18 +128,19 @@ local isAIndex = prudentTable.isAIndex
 -- (only tests whether len(t) has ever been set - no guarantees about "integrity")
 --@param t Lua table
 --@return boolean - true indicates t has been managed as a prudentTable
-function prudentTable.isprudentTable(t) return len(t)~=nil end
-local isprudentTable = prudentTable.isprudentTable
+function prudentTable.isPrudentTable(t) return len(t)~=nil end
+local isPrudentTable = prudentTable.isPrudentTable
 
 
 --- Returns the non-nil length/size of the array component of a standard Lua table
--- Simply loops from index 1 until the first nil-valued element
---@param aLuaTable "standard" table
+-- Simply loops from index 1 until the first nil-valued element.
+-- Note that this function does not set any length/size for t, but merely scans.
+--@param t table
 --return size of non-nil array (integer >= 0)
-function prudentTable.nonNilLen(aLuaTable)
-	assert(type(aLuaTable) == "table")
+function prudentTable.nonNilLen(t)
+	assert(type(t) == "table")
 	local n = 1
-	while aLuaTable[n] ~= nil do n=n+1 end
+	while t[n] ~= nil do n=n+1 end
 	return n - 1
 end
 local nonNilLen = prudentTable.nonNilLen
@@ -158,6 +160,10 @@ local isTableLenOK = prudentTable.isTableLenOK
 -- 
 -------------------------------------------------------------------------------
 
+--- Register a constraint/precondition for the array elements of table t.
+--@param t table
+--@param aPreCondFun a function aPreCondFun(value,index,table) that returns boolean,value
+--@return Unmodified table t
 function prudentTable.setArrayConstraint(t,aPreCondFun)
 	arrayConstraintT[t] = aPreCondFun
 	local pcf = arrayConstraintT[t]
@@ -179,25 +185,25 @@ end
 -- get, set, array, len, setLen 
 -------------------------------------------------------------------------------
 
---- Returns the size of the array component of table t
+--- Returns the length/size of the array component of table t
 --@param t An table instance - will throw exception if other type
 --@return Integer >= 0 indicating the size of ATAble's array
 function prudentTable.len(t)
-	--assert(isprudentTable(t), "Argument is not an prudentTable instance")
+	--assert(isPrudentTable(t), "Argument is not an prudentTable instance")
 	--local mt = getmetatable(t)
 	--local len = mt.__len
 	return tableLenT[t] or 0 -- should just work or barf
 end
 local len = prudentTable.len
 
---- Set the size of the array component of table t.
+--- Set the length/size of the array component of table t.
 -- If size is increased, it may make existing map entries become part of the array.
 -- I size is decreased, then some array components may become map entries
 -- No entries or values are deleted or nil'ed
 --@param t An table instance - will throw exception if other type
 --@param n Integer >= 0
 function prudentTable.setLen(t, n, pedantic)
-	--assert(isprudentTable(t) and isGT0Int(n))
+	--assert(isPrudentTable(t) and isGT0Int(n))
 	assert(isGE0Int(n))
 	if pedantic then
 		local oldn = tableLenT[t]
@@ -212,12 +218,24 @@ end
 local setLen = prudentTable.setLen
 
 
-function prudentTable.newTable(...)
-	local t = {...}
-	tableLenT[t] = select('#', ...)
-	return t
+--- Returns n element values as a new table, starting at index b of table t.
+-- Range must not extend array boundaries.
+-- May return default values if so registered for t.
+--@param t a table instance
+--@param b start of range (>=1)
+--@param n  number of element-values to return - b+n-1 <= len(t) - n default to 1 - n may be 0
+--@return new table with requested values (including possible nils)
+function prudentTable.aGetTable(t,b,n)
+	assert(isAIndex(t,b))
+	n = n or 1
+	if n==0 then return setLen({},0) end
+	assert(isAIndex(t,b+n-1))
+	d = getArrayDefault(t)
+	local tmp = {}
+	for i = 1,n do tmp[i] = t[b+i-1] or d end
+	return setLen(tmp,n)
 end
-local newTable = prudentTable.newTable
+local aGetTable = prudentTable.aGetTable
 
 
 --- Returns n element values as a list, starting at index b of table t.
@@ -228,23 +246,28 @@ local newTable = prudentTable.newTable
 --@param n  number of element-values to return - b+n-1 <= len(t) - n default to 1 - n may be 0
 --@return one or more values (including possible nils)
 function prudentTable.aGet(t,b,n)
-	--assert(isprudentTable(t))
-	assert(isAIndex(t,b))
-	n = n or 1
-	if n==0 then return end
-	assert(isAIndex(t,b+n-1))
-	d = getArrayDefault(t)
-	if d then
-		local tmp = {}
-		for i = b,b+n-1 do
-			tmp[i-b+1] = t[i] or d
-		end
-		return unpack(tmp,1,n)
-	else
-		return unpack(t,b,b+n-1)
-	end
+	-- Note that this is the "original" unpack and not the prudentTable.unpack!!
+	return unpack(aGetTable(t,b,n),1,n)
 end
 local aGet = prudentTable.aGet
+
+
+--- Copies the array elements of t1 into the array-component of table t starting at index b
+-- Array-size must be able to accomodate the list as it does not grow automatically.
+--@param t an table instance (target)
+--@param b target start-index
+--@param t1 a table instance (source)
+--@returns modified table t
+function prudentTable.aSetTable(t,b,t1)
+	assert(isAIndex(t,b))
+	local lt1 = len(t1)
+	if lt1 == 0 then return t end
+	local lt = len(t)
+	assert( (b + lt1 - 1) <= lt)
+	for i = 0, lt1-1 do t[b+i] = t1[i+1] end
+	return t
+end
+local aSetTable = prudentTable.aSetTable
 
 
 --- Copies a list of values into the array-component of table t starting at index b
@@ -254,15 +277,27 @@ local aGet = prudentTable.aGet
 --@param ... list of zero, one or more values
 --@returns modified table t
 function prudentTable.aSet(t,b,...)
-	--assert(isprudentTable(t))
-	assert(isAIndex(t,b))
-	local tmp = {n = select('#', ...), ...}
-	if tmp.n == 0 then return t end
-	assert( (b + tmp.n - 1) <= len(t))
-	for i = 0,tmp.n-1 do t[b+i] = tmp[i+1] end
-	return t
+	local t1 = setLen({...}, select('#', ...))
+	return aSetTable(t,b,t1)
 end
 local aSet = prudentTable.aSet
+
+
+--- Extends and adds the array elements of t1 at the end of the array-component 
+-- of table t.
+-- Array-size is increased to accomodate the list of values. (nils are added)
+--@param t a table instance (target)
+--@param t1 table instance (source)
+--@return modified table t
+function prudentTable.aAddTable(t,t1)
+	local lt1 = len(t1)
+	if lt1 == 0 then return t end
+	local lt = len(t)
+	setLen(t, lt+lt1)
+	t = aSetTable(t,lt+1,t1)
+	return t
+end
+local aAddTable = prudentTable.aAddTable
 
 
 --- Extends and adds a list of values at the end of the array-component 
@@ -272,14 +307,33 @@ local aSet = prudentTable.aSet
 --@param ... list of zero, one or more values
 --@return modified table t
 function prudentTable.aAdd(t,...)
-	local n = select('#', ...)
-	if n == 0 then return t end
-	local oldLen = len(t)
-	setLen(t, oldLen+n)
-	aSet(t,oldLen+1,...)
-	return t
+	local t1 = setLen({...}, select('#', ...))
+	return aAddTable(t,t1)
 end
 local aAdd = prudentTable.aAdd
+
+
+--- Extends and inserts the array-elements of table t2 at index b of table t.
+-- Array-size is increased to accomodate the list of values.
+-- Existing elements are moved-up - no values are overwritten.
+-- (nils are added)
+--@param t a table instance (target)
+--@param b Starting index for insertion
+--@param t1 table (source)
+--@returns modified table t
+function prudentTable.aInsertTable(t,b,t1)
+	-- accommodate inserting into empty, zero-size array
+	if(len(t) == 0 and b == 1) then return aAddTable(t,t1) end
+	assert(isAIndex(t,b))
+	local n = len(t1)
+	if n==0 then return t end
+	local oldLen = len(t)
+	setLen(t, oldLen+n)     -- extend size
+	t = aSetTable(t,b+n,aGetTable(t,b,n)) -- move up
+	t = aSetTable(t,b,t1)           -- insert
+	return t
+end
+local aInsertTable = prudentTable.aInsertTable
 
 
 --- Extends and inserts a list of values at index b of table t.
@@ -291,17 +345,8 @@ local aAdd = prudentTable.aAdd
 --@param ... list of zero, one or more values
 --@returns modified table t
 function prudentTable.aInsert(t,b,...)
-	-- accommodate inserting into empty, zero-size array
-	if(len(t) == 0 and b == 1) then return aAdd(t,...) end
-	assert(isAIndex(t,b))
-	local n = select('#', ...)
-	if n==0 then return t end
-	local oldLen = len(t)
-	setLen(t, oldLen+n)     -- extend size
-	print("aInsert:", oldLen,len(t),b,n)
-	aSet(t,b+n,aGet(t,b,n)) -- move up
-	aSet(t,b,...)           -- insert
-	return t
+	local t1 = setLen({...}, select('#', ...))
+	return aInsertTable(t,b,t1)
 end
 local aInsert = prudentTable.aInsert
 
@@ -312,18 +357,32 @@ local aInsert = prudentTable.aInsert
 --@param t an table instance
 --@param b Starting index for removal.
 --@param n Number of elements to remove. (default is 1, may be 0)
---@returns modified table t
-function prudentTable.aRemove(t,b,n)
+--@returns Removed element value(s) in a new table
+function prudentTable.aRemoveTable(t,b,n)
 	assert(isAIndex(t,b))
 	n = n or 1
-	if n==0 then return t end
+	if n==0 then return setLen({},0) end
 	assert(isAIndex(t,b+n-1))
-	local oldLen = len(t)
-	if b+n-1 < oldLen then
-		aSet(t,b, aGet(t,b+n,oldLen-b-n))
+	local lt = len(t)
+	local rvs = aGetTable(t,b,n)  -- table with removed values
+	if b+n-1 < lt then
+		aSetTable(t,b, aGetTable(t,b+n,lt-b-n))
 	end
-	setLen(t, oldLen-n)
-	return t
+	setLen(t, lt-n)
+	return rvs
+end
+local aRemoveTable = prudentTable.aRemoveTable
+
+
+--- Removes n elements from table t starting with index b, 
+-- and decreases the array size accordingly. 
+-- (does not treat elements with nil-value special)
+--@param t an table instance
+--@param b Starting index for removal.
+--@param n Number of elements to remove. (default is 1, may be 0)
+--@returns Removed element value(s)
+function prudentTable.aRemove(t,b,n)
+	return prudentTable.unpack(aRemoveTable(t,b,n))
 end
 local aRemove = prudentTable.aRemove
 
