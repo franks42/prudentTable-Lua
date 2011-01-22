@@ -106,6 +106,8 @@ print("removeNils")
 pp(t10)
 pp(pT.removeNils(t10))
 
+print("setLen")
+pp(pT.setLen({a="a", b="b", 1,2,3,nil}, 4, true))
 
 print("End")
 
