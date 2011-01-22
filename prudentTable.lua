@@ -1,390 +1,317 @@
 -------------------------------------------------------------------------------
--- prudentTable.lua.
+--[[  prudentTable.lua - A module for the less-adventurous among us lua-coders
+--
+-- Copyright (c) Frank Siebenlist. All rights reserved.
+-- The use and distribution terms for this software are covered by the
+-- Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php).
+-- By using this software in any fashion, you are agreeing to be bound by
+-- the terms of this license.
+-- You must not remove this notice, or any other, from this software.
+--
+--]]
 -------------------------------------------------------------------------------
 
-local prudentTable = {}
-
--------------------------------------------------------------------------------
--- weak table for representing proxied storage tables.
-local data = setmetatable({}, {__mode = 'k'})
+-- main table to return, which will hold all the exported functions
+local pT = {}
 
 -- weak table for representing the size/length/count of array-tables.
--- n = tableLenT[t] or 0
+-- n = tableLenT[t] or nil
 local tableLenT = setmetatable({}, {__mode = 'k'})
 
--- weak table for representing the pre-condition and transform functions per prudentTable instance for setting of array values.
--- functions should have signature: setCond(v,i,t) => successOrFail, setValue
-local arrayConstraintT = setmetatable({}, {__mode = 'k'})
+-- array-length URI definition for persistent import/export of tables
+pT.arrayLengthKey = "uri:http://www.luna.org/ns/arrayLength"
+local arrayLengthKey = pT.arrayLengthKey
 
-prudentTable.arrayLengthKey = "uri:http://www.luna.org/ns/arrayLength"
-local arrayLengthKey = prudentTable.arrayLengthKey
+-------------------------------------------------------------------------------
 
-prudentTable.arrayDefaultValueKey = "uri:http://www.luna.org/ns/arrayDefaultValue"
-local arrayDefaultValueKey = prudentTable.arrayDefaultValueKey
-
+-- local convenience function to test whether k is integer and >0
 local function isGT0Int(k)
 	return	type(k)=="number" and k == math.floor(k) and k > 0  
 end
 
+-- local convenience function to test whether k is integer and >=0
 local function isGE0Int(k)
 	return	type(k)=="number" and k == math.floor(k) and k >= 0  
 end
 
--------------------------------------------------------------------------------
---  Array Default Value
--------------------------------------------------------------------------------
-
---local weak-table to maintain the registered default array-values for tables
-local arrayDefaultT = setmetatable({}, {__mode = 'k'})
-
---- Register a default array value dv for table t.
---@param t table
---@param dv Any value (default for default is nil - also used to "reset")
---@return unmodified table t
-function prudentTable.setArrayDefault(t,dv)
-	arrayDefaultT[t] = dv
-	return t
-end
-local setArrayDefault = prudentTable.setArrayDefault
-
---- Returns the registered default array value for table t
---@param t table
---@return Registered value (any type - nil is default)
-function prudentTable.getArrayDefault(t)
-	return arrayDefaultT[t]
-end
-local getArrayDefault = prudentTable.getArrayDefault
-
--------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------
--- Permanent Keys
--------------------------------------------------------------------------------
-
---local weak-table to maintain the registered permanent keys for tables
-local permKeysT = setmetatable({}, {__mode = 'k'})
-
---- Register one or more keys as permanent keys for table t.
---@param t table
---@param ... one or more keys (anything but nil)
---@return unmodified table t
-function prudentTable.setPermKey(t,...)
-	assert(type(t)=="table")
-	permKeysT[t] = permKeysT[t] or {}
-	pKt = permKeysT[t]
-	local tmp = {...}
-	for i = 1, select("#",...) do
-		local pk = tmp[i]
-		if(not pk~=nil)then pKt[pk] = true end
-	end
-	return t
-end
-local setPermKey = prudentTable.setPermKey
-
---- Unregister/remove key pk as a permanent key for table t.
---@param t table
---@param pk key (anything but nil)
---@return unmodified table t
-function prudentTable.removePermKey(t,pk)
-	permKeysT[t] = permKeysT[t] or {}
-	local pkt = permKeysT[t]
-	pkt[pk] = nil
-	return t
-end
-local removePermKey = prudentTable.removePermKey
-
---- Returns whether key k is registered as a permanent key for table t.
---@param t table
---@param pk key (anything but nil)
---@return Boolean
-function prudentTable.isPermKey(t,k)
-	permKeysT[t] = permKeysT[t] or {}
-	return permKeysT[t][k] == true or isAIndex(t,k)
-end
-local isPermKey = prudentTable.isPermKey
-
---- Returns a list of all registered permanent keys for table t.
---@param t table
---@return List of keys
-function prudentTable.permKeys(t)
-	-- need some more functional-functions...
-	-- return func.keys(permKeysT[t])
-end
-
-
--------------------------------------------------------------------------------
 
 --- Returns whether the key k is a valid index for the array-component of table t
 --@param t table instance
 --@param k a possible array index value
 --@return boolean - true indicates k is integer and 1 <= k <= len(t)
-function prudentTable.isAIndex(t,k)
-	return isGT0Int(k) and k <= (tableLenT[t] or 0)
+function pT.isIndex(t,k)
+	return isGT0Int(k) and k <= pT.len(t)
 end
-local isAIndex = prudentTable.isAIndex
+local isIndex = pT.isIndex
 
 
---- Returns whether the t has been managed as a prudentTable.
+--- Returns whether the t has registered as a prudentTable.
 -- (only tests whether len(t) has ever been set - no guarantees about "integrity")
 --@param t Lua table
---@return boolean - true indicates t has been managed as a prudentTable
-function prudentTable.isPrudentTable(t) return len(t)~=nil end
-local isPrudentTable = prudentTable.isPrudentTable
+--@return boolean - true indicates t has registered as a prudentTable
+function pT.isPrudentTable(t) 
+	return type(t)=="table" and tableLenT[t] ~= nil 
+end
+local isPrudentTable = pT.isPrudentTable
 
 
 --- Returns the non-nil length/size of the array component of a standard Lua table
 -- Simply loops from index 1 until the first nil-valued element.
 -- Note that this function does not set any length/size for t, but merely scans.
 --@param t table
---return size of non-nil array (integer >= 0)
-function prudentTable.nonNilLen(t)
+--@return size of non-nil array (integer >= 0)
+function pT.nonNilLen(t)
 	assert(type(t) == "table")
 	local n = 1
 	while t[n] ~= nil do n=n+1 end
 	return n - 1
 end
-local nonNilLen = prudentTable.nonNilLen
+local nonNilLen = pT.nonNilLen
 
 
---- Returns whether the Lua table lt's length may be ambiguous by comparing lt's non-nil array size with #lt
---param lt A "standard" table
---return Boolean: true if non-nil length equals #
-function prudentTable.isTableLenOK(lt)
+--- Returns whether the Lua table lt's length may be ambiguous by comparing lt's non-nil array size (nonNilLen(t)) with #lt. 
+-- This could be a determination whether the #t is the length to use for an unknown table.
+--@param lt A "standard" lua-table
+--@return Boolean: true if non-nil length equals #
+function pT.isLuaTableLenOK(lt)
 	return nonNilLen(lt) == #lt
 end
-local isTableLenOK = prudentTable.isTableLenOK
+local isLuaTableLenOK = pT.isLuaTableLenOK
 
 
--------------------------------------------------------------------------------
--- "constraint/precondition" specific functions for array
--- 
--------------------------------------------------------------------------------
-
---- Register a constraint/precondition for the array elements of table t.
---@param t table
---@param aPreCondFun a function aPreCondFun(value,index,table) that returns boolean,value
---@return Unmodified table t
-function prudentTable.setArrayConstraint(t,aPreCondFun)
-	arrayConstraintT[t] = aPreCondFun
-	local pcf = arrayConstraintT[t]
-	local d = data[t]
-	-- verify array to keep consistency
-	for i,v in prudentTable.arrayPairs(t) do
-		r,v = pcf(v,i,t)
-		assert(r,"Precondition failure on index '"..i.."' and value '"..tostring(v).."'")
-		d[i] = v
-	end
-	return t
+--- Returns the registered length/size of the array component of prudentTable t
+--@param t prudentTable
+--@return Integer >= 0 indicating the size/length of t's array-component
+function pT.len(t)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	return tableLenT[t]
 end
+pT.getLen = pT.len  -- alias for naming consistency
+local len = pT.len
+local getLen = pT.getLen
 
--- should have a static testPreCond function to test the result of an entry before the actual entry
 
-
--------------------------------------------------------------------------------
--- Basic "array" specific functions
--- get, set, array, len, setLen 
--------------------------------------------------------------------------------
-
---- Returns the length/size of the array component of table t
---@param t An table instance - will throw exception if other type
---@return Integer >= 0 indicating the size of ATAble's array
-function prudentTable.len(t)
-	--assert(isPrudentTable(t), "Argument is not an prudentTable instance")
-	--local mt = getmetatable(t)
-	--local len = mt.__len
-	return tableLenT[t] or 0 -- should just work or barf
-end
-local len = prudentTable.len
-
---- Set the length/size of the array component of table t.
--- If size is increased, it may make existing map entries become part of the array.
--- I size is decreased, then some array components may become map entries
--- No entries or values are deleted or nil'ed
---@param t An table instance - will throw exception if other type
+--- Set the length/size of the array component of table t and registers t as a prudentTable.
+-- Thru pT.setLen(), a Lua-table t is "registered" as a prudentTable.
+-- If size is increased, then existing map entries become part of the array.
+-- If size is decreased, then some array components become map entries.
+-- If resetValues==true then all new array/map elements get reset to nil.
+-- This reset is to avoid any inconsistencies caused by unexpected new map/array elements.
+--@usage local t = pT.setLen({a="a", b="b", 1,2,3,nil}, 4, false)
+--@usage t = pT.setLen(t,5) ; pT.set(t,5,"five")
+--@param t An standard lua-table or prudentTable
 --@param n Integer >= 0
-function prudentTable.setLen(t, n, pedantic)
-	--assert(isPrudentTable(t) and isGT0Int(n))
+--@param resetValues boolean (default true) - resets new array or map elements to nil.
+--@return prudentTable t (possibly modified - depending on n and resetValues)
+function pT.setLen(t, n, resetValues)
+	assert(type(t)=="table")
 	assert(isGE0Int(n))
-	if pedantic then
-		local oldn = tableLenT[t]
-		if n == oldn then return t end  -- nothing to do
+	resetValues = resetValues==nil or resetValues  -- defaults to true
+	local oldn = 0
+	if isPrudentTable(t) then oldn = pT.len(t) end
+	if resetValues and oldn~=n then
 		local b,e
 		if oldn < n then b,e=oldn+1,n else b,e=n+1,oldn end
 		for i = b,e do t[i]=nil end   -- nil-out all new or old array elements
 	end
-	tableLenT[t] = n
+	tableLenT[t] = n  -- register the table size and make t a prudentTable
 	return t
 end
-local setLen = prudentTable.setLen
+local setLen = pT.setLen
 
 
---- Returns n element values as a new table, starting at index b of table t.
+--- Returns n element values as a new prudentTable, starting at index i of prudentTable t.
 -- Range must not extend array boundaries.
--- May return default values if so registered for t.
---@param t a table instance
---@param b start of range (>=1)
---@param n  number of element-values to return - b+n-1 <= len(t) - n default to 1 - n may be 0
---@return new table with requested values (including possible nils)
-function prudentTable.aGetTable(t,b,n)
-	assert(isAIndex(t,b))
+--@param t prudentTable
+--@param i start of range (>=1)
+--@param n  number of element-values to return - i+n-1 <= len(t) - n default to 1 - n may be 0
+--@return new prudentTable with requested values in the array-component (including possible nils)
+function pT.getTable(t,i,n)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	assert(isIndex(t,i))
+	local tmp = pT.pack()
 	n = n or 1
-	if n==0 then return setLen({},0) end
-	assert(isAIndex(t,b+n-1))
-	d = getArrayDefault(t)
-	local tmp = {}
-	for i = 1,n do tmp[i] = t[b+i-1] or d end
-	return setLen(tmp,n)
+	if n==0 then return tmp end
+	assert(isIndex(t,i+n-1))
+	setLen(tmp,n,false)
+	for j = 1,n do tmp[j] = t[i+j-1] end
+	return tmp
 end
-local aGetTable = prudentTable.aGetTable
+local getTable = pT.getTable
 
 
---- Returns n element values as a list, starting at index b of table t.
+--- Returns n element values as a list, starting at index i of prudentTable t.
 -- Range must not extend array boundaries.
--- May return default values if so registered for t.
---@param t a table instance
---@param b start of range (>=1)
---@param n  number of element-values to return - b+n-1 <= len(t) - n default to 1 - n may be 0
---@return one or more values (including possible nils)
-function prudentTable.aGet(t,b,n)
-	-- Note that this is the "original" unpack and not the prudentTable.unpack!!
-	return unpack(aGetTable(t,b,n),1,n)
+--@param t prudentTable
+--@param i start of range (>=1)
+--@param n  number of element-values to return - i+n-1 <= len(t) - n default to 1 - n may be 0
+--@return list of zero, one or more values (including possible nils)
+function pT.get(t,i,n)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	local tmp = getTable(t,i,n)
+	-- Note that this is the "original" unpack and not the pT.unpack!!
+	return unpack(tmp,1,n)
 end
-local aGet = prudentTable.aGet
+local get = pT.get
 
 
---- Copies the array elements of t1 into the array-component of table t starting at index b
+--- Returns a (shallow) copy of prudentTable t.
+--@param t prudentTable
+--@return a new prudentTable - shallow copy of t
+function pT.copy(t)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	local tmp = pT.pack()
+	for k,v in pairs(t) do tmp[k] = t[v] end
+	setLen(tmp, len(t), false)
+	return tmp
+end
+local copy = pT.copy
+
+
+--- Copies the array elements of prudentTable t1 into the array-component of prudentTable t starting at index i
 -- Array-size must be able to accomodate the list as it does not grow automatically.
---@param t an table instance (target)
---@param b target start-index
---@param t1 a table instance (source)
---@returns modified table t
-function prudentTable.aSetTable(t,b,t1)
-	assert(isAIndex(t,b))
+--@param t prudentTable (target)
+--@param i target start-index
+--@param t1 prudentTable (source)
+--@returns modified prudentTable t
+function pT.setTable(t,i,t1)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	assert(isIndex(t,i))
 	local lt1 = len(t1)
 	if lt1 == 0 then return t end
 	local lt = len(t)
-	assert( (b + lt1 - 1) <= lt)
-	for i = 0, lt1-1 do t[b+i] = t1[i+1] end
+	assert( (i + lt1 - 1) <= lt)
+	for j = 0, lt1-1 do t[i+j] = t1[j+1] end
 	return t
 end
-local aSetTable = prudentTable.aSetTable
+local setTable = pT.setTable
 
 
---- Copies a list of values into the array-component of table t starting at index b
+--- Copies a list of values into the array-component of prudentTable t starting at index i
 -- Array-size must be able to accomodate the list as it does not grow automatically.
---@param t an table instance
---@param b target start-index
+--@param t prudentTable
+--@param i target start-index
 --@param ... list of zero, one or more values
---@returns modified table t
-function prudentTable.aSet(t,b,...)
-	local t1 = setLen({...}, select('#', ...))
-	return aSetTable(t,b,t1)
+--@return modified prudentTable t
+function pT.set(t,i,...)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	return setTable(t,i,pT.pack(...))
 end
-local aSet = prudentTable.aSet
+local set = pT.set
 
 
---- Extends and adds the array elements of t1 at the end of the array-component 
--- of table t.
--- Array-size is increased to accomodate the list of values. (nils are added)
---@param t a table instance (target)
---@param t1 table instance (source)
---@return modified table t
-function prudentTable.aAddTable(t,t1)
+--- Extends and adds the array elements of prudentTable t1 at the end of the array-component 
+-- of prudentTable t.
+-- Array-size is increased to accomodate the list of values. 
+-- (nil-friendly)
+--@param t prudentTable (target)
+--@param t1 prudentTable (source)
+--@return modified prudentTable t
+function pT.addTable(t,t1)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	-- Resize t to accomodate t1 and delegate to setTable()
 	local lt1 = len(t1)
 	if lt1 == 0 then return t end
 	local lt = len(t)
 	setLen(t, lt+lt1)
-	t = aSetTable(t,lt+1,t1)
+	t = setTable(t,lt+1,t1)
 	return t
 end
-local aAddTable = prudentTable.aAddTable
+local addTable = pT.addTable
 
 
 --- Extends and adds a list of values at the end of the array-component 
--- of table t.
+-- of prudentTable t.
 -- Array-size is increased to accomodate the list of values. (nils are added)
---@param t a table instance
+--@param t prudentTable
 --@param ... list of zero, one or more values
---@return modified table t
-function prudentTable.aAdd(t,...)
-	local t1 = setLen({...}, select('#', ...))
-	return aAddTable(t,t1)
+--@return modified prudentTable t
+function pT.add(t,...)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	local t1 = setLen({...}, select('#', ...), false)
+	return addTable(t,t1)
 end
-local aAdd = prudentTable.aAdd
+local add = pT.add
 
 
---- Extends and inserts the array-elements of table t2 at index b of table t.
+--- Extends and inserts the array-elements of prudentTable t1 at index i of prudentTable t.
 -- Array-size is increased to accomodate the list of values.
 -- Existing elements are moved-up - no values are overwritten.
--- (nils are added)
---@param t a table instance (target)
---@param b Starting index for insertion
---@param t1 table (source)
---@returns modified table t
-function prudentTable.aInsertTable(t,b,t1)
+-- (nil-friendly)
+--@param t prudentTable (target)
+--@param i Starting index for insertion
+--@param t1 prudentTable (source)
+--@returns modified prudentTable t
+function pT.insertTable(t,i,t1)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
 	-- accommodate inserting into empty, zero-size array
-	if(len(t) == 0 and b == 1) then return aAddTable(t,t1) end
-	assert(isAIndex(t,b))
+	if(len(t) == 0 and i == 1) then return addTable(t,t1) end
+	assert(isIndex(t,i))
 	local n = len(t1)
 	if n==0 then return t end
 	local oldLen = len(t)
 	setLen(t, oldLen+n)     -- extend size
-	t = aSetTable(t,b+n,aGetTable(t,b,n)) -- move up
-	t = aSetTable(t,b,t1)           -- insert
+	t = setTable(t,i+n,getTable(t,i,n)) -- move up
+	t = setTable(t,i,t1)           -- insert
 	return t
 end
-local aInsertTable = prudentTable.aInsertTable
+local insertTable = pT.insertTable
 
 
---- Extends and inserts a list of values at index b of table t.
+--- Extends and inserts a list of values at index i of prudentTable t.
 -- Array-size is increased to accomodate the list of values.
 -- Existing elements are moved-up - no values are overwritten.
--- (nils are added)
---@param t a table instance
---@param b Starting index for insertion
+-- (nil-friendly)
+--@param t prudentTable
+--@param i Starting index for insertion
 --@param ... list of zero, one or more values
---@returns modified table t
-function prudentTable.aInsert(t,b,...)
-	local t1 = setLen({...}, select('#', ...))
-	return aInsertTable(t,b,t1)
+--@return modified prudentTable t
+function pT.insert(t,i,...)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	local t1 = setLen({...}, select('#', ...), false)
+	return insertTable(t,i,t1)
 end
-local aInsert = prudentTable.aInsert
+local insert = pT.insert
 
 
---- Removes n elements from table t starting with index b, 
--- and decreases the array size accordingly. 
--- (does not treat elements with nil-value special)
---@param t an table instance
---@param b Starting index for removal.
+--- Removes n elements from prudentTable t starting with index i, 
+-- returns those removed element values as a new prudentTable, 
+-- and decreases t's array size accordingly. 
+-- (nil-friendly)
+--@param t prudentTable (changed inplace)
+--@param i Starting index for removal.
 --@param n Number of elements to remove. (default is 1, may be 0)
---@returns Removed element value(s) in a new table
-function prudentTable.aRemoveTable(t,b,n)
-	assert(isAIndex(t,b))
+--@return New prudentTable with removed element value(s) in the array component. 
+function pT.removeTable(t,i,n)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	assert(isIndex(t,i))
 	n = n or 1
-	if n==0 then return setLen({},0) end
-	assert(isAIndex(t,b+n-1))
+	if n==0 then return pT.pack() end
+	assert(isIndex(t,i+n-1))
 	local lt = len(t)
-	local rvs = aGetTable(t,b,n)  -- table with removed values
-	if b+n-1 < lt then
-		aSetTable(t,b, aGetTable(t,b+n,lt-b-n))
+	local rvs = getTable(t,i,n)  -- table with removed values
+	if i+n-1 < lt then
+		setTable(t,i, getTable(t,i+n,lt-i-n+1))
 	end
 	setLen(t, lt-n)
 	return rvs
 end
-local aRemoveTable = prudentTable.aRemoveTable
+local removeTable = pT.removeTable
 
 
---- Removes n elements from table t starting with index b, 
--- and decreases the array size accordingly. 
--- (does not treat elements with nil-value special)
---@param t an table instance
---@param b Starting index for removal.
+--- Removes n elements from prudentTable t starting with index i, 
+-- returns those removed element values as a list, 
+-- and decreases t's array size accordingly. 
+-- (nil-friendly)
+--@param t prudentTable (changed inplace)
+--@param i Starting index for removal.
 --@param n Number of elements to remove. (default is 1, may be 0)
---@returns Removed element value(s)
-function prudentTable.aRemove(t,b,n)
-	return prudentTable.unpack(aRemoveTable(t,b,n))
+--@return List of removed element value(s)
+function pT.remove(t,i,n)
+	--assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	return pT.unpack(removeTable(t,i,n))
 end
-local aRemove = prudentTable.aRemove
+local remove = pT.remove
 
 
 -------------------------------------------------------------------------------
@@ -392,46 +319,44 @@ local aRemove = prudentTable.aRemove
 -- pack, unpack 
 -------------------------------------------------------------------------------
 
---- Replacement for the table constructor pack(), which takes a list of arguments 
--- and adds them as array-elements of a new array. This pack registers the array 
--- length and also uses the "convention" of adding an entry: n = select('#', ...).
--- (the latter is NOT used by prudentTable - just trying to play nice...)
+--- prudentTable constructor (table.pack() replacement), which copies the list arguments into the 
+-- array-component of the newly created prudentTable.
+-- Registers the "correct" argument list size for the array-length.
+-- (nil-friendly)
+-- Uses the "convention" of adding an entry: n = select('#', ...).
+-- (however, the latter is NOT used by any prudentTable-function - just trying to play nice...)
 --@param ... List of elements to add to the array-component of the newly created table
---@return Newly created table instance
-function prudentTable.pack(...)
-	local t = {n = select('#', ...), ...}
-	setLen(t, t.n)
-	return t 
+--@return Newly created prudentTable instance
+function pT.pack(...)
+	return setLen({n = select('#', ...), ...}, select('#', ...), false)
 end
 
---- Unpacks a table-array (from a previously packed-list) into a new list of values.
--- Note that unpack relies on proper predentTable.setLen() registration, 
--- either thru prudentTable.pack() or some other prudentTable-function.
--- It does NOT use any "t.n" that may be used to indicates the array-length.
--- May return default values if so registered for t.
---@param t table instance
---@param b start of range to copy - default to 1
---@param e end of range to copy - defaults to len(t)
+--- Unpacks and returns the array-component of prudentTable t as a list of values (table.unpack() replacement).
+-- pT.unpack does NOT use any "t.n" that may be used to indicates the array-length.
+--@param t prudentTable
+--@param b start of range to copy - defaults to 1
+--@param e end of range to copy - defaults to pT.len(t)
 --@return list of values representing t[b:e] - may include nils
-function prudentTable.unpack(t,b,e)
-	assert(type(t)=="table")
+function pT.unpack(t,b,e)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	if len(t)==0 then return end -- return "nothing"
 	e = e or len(t)
-	if e==0 then return end
 	b = b or 1
-	return aGet(t,b,e-b+1) 
+	assert(isIndex(t,b) and isIndex(t,e) and b <= e , "pT.unpack: range arguments not proper array-indices, or begin > end")
+	return get(t,b,e-b+1) 
 end
 
 
 -------------------------------------------------------------------------------
 -- Basic "iterator" specific functions
--- arrayPairs, mappairs, tablepairs 
+-- arrayPairs, rarrayPairs, mapPairs, tablePairs, listPairs 
 -------------------------------------------------------------------------------
 
 --- Local helper function for "arrayPairs()"
 local function arrayPairs_iter(t, i)
 	i = i + 1
-	if i <= (tableLenT[t] or 0) then
-		return i, aGet(t,i)
+	if i <= (len(t) or 0) then
+		return i, get(t,i)
 	end
 end
 
@@ -439,62 +364,60 @@ end
 local function rarrayPairs_iter(t, i)
 	i = i - 1
 	if i >= 1 then
-		return i, aGet(t,i)
+		return i, get(t,i)
 	end
 end
 
 --- ipairs-replacement that handles nil values for an prudentTable's array-component
 -- and iterates from t[1] till t[len(t)]
-function prudentTable.arrayPairs(t, i)
+function pT.arrayPairs(t, i)
 	return arrayPairs_iter, t, 0
 end
+local arrayPairs = pT.arrayPairs
 
 --- reverse ipairs-replacement that handles nil values for an prudentTable's 
 -- array-component and iterates down from t[len(t)] till t[1].
-function prudentTable.rarrayPairs(t, i)
+function pT.rarrayPairs(t, i)
 	return rarrayPairs_iter, t, len(t)+1
 end
+local rarrayPairs = pT.rarrayPairs
 
---- Pairs-like iterator that excludes any k that are array indices - 
--- only iterates over the map-component of the prudentTable.
-function prudentTable.atablenext(t, k)
-	local d = data[t]
-	if not d then return end
-	k = next(d, k)
-	return k
-end
-local atablenext = prudentTable.atablenext
-
---- Pairs-like iterator that includes all assigned keys - 
--- Ignores array entries with nil values.
-function prudentTable.atablepairs(t, i)
-	return atablenext, t, nil
-end
 
 --- Pairs-like iterator that excludes any k that are array indices - 
 -- Only iterates over the map-component of the prudentTable.
-function prudentTable.mapnext(t, k)
+function pT.mapNext(t, k)
 	local d = data[t]
 	if not d then return end
 	k = next(d, k)
 	while k do
-		if not isAIndex(k) then break end
+		if not isIndex(k) then break end
 		k = next(d, k)
 	end
 	return k
 end
-local mapnext = prudentTable.mapnext
+local mapNext = pT.mapNext
 
 --- Pairs-like iterator that excludes any k that are array indices - 
 -- only iterates over the map-component of the prudentTable.
-function prudentTable.mappairs(t, i)
-	return mapnext, t, nil
+function pT.mapPairs(t, i)
+	return mapNext, t, nil
+end
+local mapPairs = pT.mapPairs
+
+
+local function listPairs_iter(a, i)
+  if i < a.n then return i+1,a[i+1] end
 end
 
--------------------------------------------------------------------------------
--- Basic "list" specific functions
--- insert, append, first, rest, last, list, concat, 
--------------------------------------------------------------------------------
+--- Iterator for varargs (friendly to nils).
+--@usage function f(...) for i,a in apairs(...) do print(i, a) end end
+--@param ... vararg list (may include nils)
+function pT.listPairs(...)
+  return listPairs_iter, {n=select('#', ...), ...}, 0
+end
+local listPairs = pT.listPairs
+pT.apairs = pT.listPairs  -- alias to accommodate common convention (a = args)
+local apairs = pT.apairs
 
 
 --- Returns whether a key k exists in table t.
@@ -505,35 +428,64 @@ end
 --@param t table
 --@param k key (not-nil)
 --@return Boolean indicating whether k is an existing key for table t
-function prudentTable.keyExists(t, k)
+function pT.keyExists(t, k)
 	assert(type(t)=="table")
 	assert(k~=nil)
-	return t[k]~=nil or (permKeysT[t]~=nil and permKeysT[t][k]~=nil) or isAIndex(t,k)
+	return t[k]~=nil or isIndex(t,k)
 end
-local keyExists = prudentTable.keyExists
+local keyExists = pT.keyExists
+
+
+--- Returns a table with a list of all the "lua-defined" keys in table t
+function pT.tableKeysTable(t)
+	local tmp = pT.pack()
+	for k,v in pairs(t) do add(tmp,k) end
+	return tmp
+end
+local tableKeysTable = pT.tableKeysTable
 
 --- Returns a list of all the "lua-defined" keys in table t
-function prudentTable.tableKeys(t)
-	local tmp = prudentTable.pack()
-	for k,v in pairs(t) do aAdd(tmp,k) end
-	return prudentTable.unpack(tmp)
+function pT.tableKeys(t)
+	return pT.unpack(tableKeysTable(t))
 end
+local tableKeys = pT.tableKeys
+
+
+--- Returns a table with a list of all the keys of the map-component of table t
+function pT.mapKeysTable(t)
+	local tmp = pT.pack()
+	for k,v in pairs(t) do 
+		if not isIndex(t,k) then add(tmp,k) end
+	end
+	return tmp
+end
+local mapKeysTable = pT.mapKeysTable
 
 --- Returns a list of all the keys of the map-component of table t
-function prudentTable.mapKeys(t)
-	local tmp = prudentTable.pack()
-	for k,v in pairs(t) do 
-		if not isAIndex(t,k) then aAdd(tmp,k) end
-	end
-	pks = permKeysT[t]
-	if pks then
-		for k,v in pairs(pks) do
-			if not t[k] then aAdd(tmp,k) end
-		end
-	end
-	return prudentTable.unpack(tmp)
+function pT.mapKeys(t)
+	return pT.unpack(mapKeysTable(t))
 end
+local mapKeys = pT.mapKeys
+
 
 -------------------------------------------------------------------------------
 
-return prudentTable
+--- Removes all the elements with nil-values from the array-component of prudentTable t.
+--@param t prudentTable
+--@return (possibly modified) prudentTable t
+function pT.removeNils(t)
+	assert(isPrudentTable(t), "Table is not a registered prudentTable")
+	for i,v in rarrayPairs(t) do 
+		if v==nil then remove(t,i) end 
+	end
+	return t
+end
+local removeNils = pT.removeNils
+
+-------------------------------------------------------------------------------
+-- Basic "list" specific functions
+-- insert, append, first, rest, last, list, concat, 
+-------------------------------------------------------------------------------
+
+
+return pT

@@ -68,173 +68,153 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.aAdd">prudentTable.aAdd</a>&nbsp;(t, ...)</td>
-	<td class="summary">Extends and adds a list of values at the end of the array-component of table t.</td>
+	<td class="name" nowrap><a href="#pT.add">pT.add</a>&nbsp;(t, ...)</td>
+	<td class="summary">Extends and adds a list of values at the end of the array-component of prudentTable t.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.aAddTable">prudentTable.aAddTable</a>&nbsp;(t, t1)</td>
-	<td class="summary">Extends and adds the array elements of t1 at the end of the array-component of table t.</td>
+	<td class="name" nowrap><a href="#pT.addTable">pT.addTable</a>&nbsp;(t, t1)</td>
+	<td class="summary">Extends and adds the array elements of prudentTable t1 at the end of the array-component of prudentTable t.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.aGet">prudentTable.aGet</a>&nbsp;(t, b, n)</td>
-	<td class="summary">Returns n element values as a list, starting at index b of table t.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#prudentTable.aGetTable">prudentTable.aGetTable</a>&nbsp;(t, b, n)</td>
-	<td class="summary">Returns n element values as a new table, starting at index b of table t.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#prudentTable.aInsert">prudentTable.aInsert</a>&nbsp;(t, b, ...)</td>
-	<td class="summary">Extends and inserts a list of values at index b of table t.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#prudentTable.aInsertTable">prudentTable.aInsertTable</a>&nbsp;(t, b, t1)</td>
-	<td class="summary">Extends and inserts the array-elements of table t2 at index b of table t.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#prudentTable.aRemove">prudentTable.aRemove</a>&nbsp;(t, b, n)</td>
-	<td class="summary">Removes n elements from table t starting with index b, and decreases the array size accordingly.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#prudentTable.aRemoveTable">prudentTable.aRemoveTable</a>&nbsp;(t, b, n)</td>
-	<td class="summary">Removes n elements from table t starting with index b, and decreases the array size accordingly.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#prudentTable.aSet">prudentTable.aSet</a>&nbsp;(t, b, ...)</td>
-	<td class="summary">Copies a list of values into the array-component of table t starting at index b Array-size must be able to accomodate the list as it does not grow automatically.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#prudentTable.aSetTable">prudentTable.aSetTable</a>&nbsp;(t, b, t1)</td>
-	<td class="summary">Copies the array elements of t1 into the array-component of table t starting at index b Array-size must be able to accomodate the list as it does not grow automatically.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#prudentTable.arrayPairs">prudentTable.arrayPairs</a>&nbsp;(t, i)</td>
+	<td class="name" nowrap><a href="#pT.arrayPairs">pT.arrayPairs</a>&nbsp;(t, i)</td>
 	<td class="summary">ipairs-replacement that handles nil values for an prudentTable's array-component and iterates from t[1] till t[len(t)] </td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.atablenext">prudentTable.atablenext</a>&nbsp;(t, k)</td>
-	<td class="summary">Pairs-like iterator that excludes any k that are array indices - only iterates over the map-component of the prudentTable.</td>
+	<td class="name" nowrap><a href="#pT.copy">pT.copy</a>&nbsp;(t)</td>
+	<td class="summary">Returns a (shallow) copy of prudentTable t.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.atablepairs">prudentTable.atablepairs</a>&nbsp;(t, i)</td>
-	<td class="summary">Pairs-like iterator that includes all assigned keys - Ignores array entries with nil values.</td>
+	<td class="name" nowrap><a href="#pT.get">pT.get</a>&nbsp;(t, i, n)</td>
+	<td class="summary">Returns n element values as a list, starting at index i of prudentTable t.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.getArrayDefault">prudentTable.getArrayDefault</a>&nbsp;(t)</td>
-	<td class="summary">Returns the registered default array value for table t </td>
+	<td class="name" nowrap><a href="#pT.getTable">pT.getTable</a>&nbsp;(t, i, n)</td>
+	<td class="summary">Returns n element values as a new prudentTable, starting at index i of prudentTable t.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.isAIndex">prudentTable.isAIndex</a>&nbsp;(t, k)</td>
+	<td class="name" nowrap><a href="#pT.insert">pT.insert</a>&nbsp;(t, i, ...)</td>
+	<td class="summary">Extends and inserts a list of values at index i of prudentTable t.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#pT.insertTable">pT.insertTable</a>&nbsp;(t, i, t1)</td>
+	<td class="summary">Extends and inserts the array-elements of prudentTable t1 at index i of prudentTable t.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#pT.isIndex">pT.isIndex</a>&nbsp;(t, k)</td>
 	<td class="summary">Returns whether the key k is a valid index for the array-component of table t </td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.isPermKey">prudentTable.isPermKey</a>&nbsp;(t, k, pk)</td>
-	<td class="summary">Returns whether key k is registered as a permanent key for table t.</td>
+	<td class="name" nowrap><a href="#pT.isLuaTableLenOK">pT.isLuaTableLenOK</a>&nbsp;(lt)</td>
+	<td class="summary">Returns whether the Lua table lt's length may be ambiguous by comparing lt's non-nil array size (nonNilLen(t)) with #lt.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.isPrudentTable">prudentTable.isPrudentTable</a>&nbsp;(t)</td>
-	<td class="summary">Returns whether the t has been managed as a prudentTable.</td>
+	<td class="name" nowrap><a href="#pT.isPrudentTable">pT.isPrudentTable</a>&nbsp;(t)</td>
+	<td class="summary">Returns whether the t has registered as a prudentTable.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.isTableLenOK">prudentTable.isTableLenOK</a>&nbsp;(lt)</td>
-	<td class="summary">Returns whether the Lua table lt's length may be ambiguous by comparing lt's non-nil array size with #lt param lt A "standard" table return Boolean: true if non-nil length equals # </td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#prudentTable.keyExists">prudentTable.keyExists</a>&nbsp;(t, k)</td>
+	<td class="name" nowrap><a href="#pT.keyExists">pT.keyExists</a>&nbsp;(t, k)</td>
 	<td class="summary">Returns whether a key k exists in table t.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.len">prudentTable.len</a>&nbsp;(t)</td>
-	<td class="summary">Returns the length/size of the array component of table t </td>
+	<td class="name" nowrap><a href="#pT.len">pT.len</a>&nbsp;(t)</td>
+	<td class="summary">Returns the registered length/size of the array component of prudentTable t </td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.mapKeys">prudentTable.mapKeys</a>&nbsp;(t)</td>
+	<td class="name" nowrap><a href="#pT.listPairs">pT.listPairs</a>&nbsp;(...)</td>
+	<td class="summary">Iterator for varargs (friendly to nils).</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#pT.mapKeys">pT.mapKeys</a>&nbsp;(t)</td>
 	<td class="summary">Returns a list of all the keys of the map-component of table t </td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.mapnext">prudentTable.mapnext</a>&nbsp;(t, k)</td>
+	<td class="name" nowrap><a href="#pT.mapKeysTable">pT.mapKeysTable</a>&nbsp;(t)</td>
+	<td class="summary">Returns a table with a list of all the keys of the map-component of table t </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#pT.mapNext">pT.mapNext</a>&nbsp;(t, k)</td>
 	<td class="summary">Pairs-like iterator that excludes any k that are array indices - Only iterates over the map-component of the prudentTable.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.mappairs">prudentTable.mappairs</a>&nbsp;(t, i)</td>
+	<td class="name" nowrap><a href="#pT.mapPairs">pT.mapPairs</a>&nbsp;(t, i)</td>
 	<td class="summary">Pairs-like iterator that excludes any k that are array indices - only iterates over the map-component of the prudentTable.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.nonNilLen">prudentTable.nonNilLen</a>&nbsp;(t)</td>
+	<td class="name" nowrap><a href="#pT.nonNilLen">pT.nonNilLen</a>&nbsp;(t)</td>
 	<td class="summary">Returns the non-nil length/size of the array component of a standard Lua table Simply loops from index 1 until the first nil-valued element.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.pack">prudentTable.pack</a>&nbsp;(...)</td>
-	<td class="summary">Replacement for the table constructor pack(), which takes a list of arguments and adds them as array-elements of a new array.</td>
+	<td class="name" nowrap><a href="#pT.pack">pT.pack</a>&nbsp;(...)</td>
+	<td class="summary">prudentTable constructor (table.pack() replacement), which copies the list arguments into the array-component of the newly created prudentTable.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.permKeys">prudentTable.permKeys</a>&nbsp;(t)</td>
-	<td class="summary">Returns a list of all registered permanent keys for table t.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#prudentTable.rarrayPairs">prudentTable.rarrayPairs</a>&nbsp;(t, i)</td>
+	<td class="name" nowrap><a href="#pT.rarrayPairs">pT.rarrayPairs</a>&nbsp;(t, i)</td>
 	<td class="summary">reverse ipairs-replacement that handles nil values for an prudentTable's array-component and iterates down from t[len(t)] till t[1].</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.removePermKey">prudentTable.removePermKey</a>&nbsp;(t, pk)</td>
-	<td class="summary">Unregister/remove key pk as a permanent key for table t.</td>
+	<td class="name" nowrap><a href="#pT.remove">pT.remove</a>&nbsp;(t, i, n)</td>
+	<td class="summary">Removes n elements from prudentTable t starting with index i, returns those removed element values as a list, and decreases t's array size accordingly.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.setArrayConstraint">prudentTable.setArrayConstraint</a>&nbsp;(t, aPreCondFun)</td>
-	<td class="summary">Register a constraint/precondition for the array elements of table t.</td>
+	<td class="name" nowrap><a href="#pT.removeNils">pT.removeNils</a>&nbsp;(t)</td>
+	<td class="summary">Removes all the elements with nil-values from the array-component of prudentTable t.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.setArrayDefault">prudentTable.setArrayDefault</a>&nbsp;(t, dv)</td>
-	<td class="summary">Register a default array value dv for table t.</td>
+	<td class="name" nowrap><a href="#pT.removeTable">pT.removeTable</a>&nbsp;(t, i, n)</td>
+	<td class="summary">Removes n elements from prudentTable t starting with index i, returns those removed element values as a new prudentTable, and decreases t's array size accordingly.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.setLen">prudentTable.setLen</a>&nbsp;(t, n, pedantic)</td>
-	<td class="summary">Set the length/size of the array component of table t.</td>
+	<td class="name" nowrap><a href="#pT.set">pT.set</a>&nbsp;(t, i, ...)</td>
+	<td class="summary">Copies a list of values into the array-component of prudentTable t starting at index i Array-size must be able to accomodate the list as it does not grow automatically.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.setPermKey">prudentTable.setPermKey</a>&nbsp;(t, ...)</td>
-	<td class="summary">Register one or more keys as permanent keys for table t.</td>
+	<td class="name" nowrap><a href="#pT.setLen">pT.setLen</a>&nbsp;(t, n, resetValues)</td>
+	<td class="summary">Set the length/size of the array component of table t and registers t as a prudentTable.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.tableKeys">prudentTable.tableKeys</a>&nbsp;(t)</td>
+	<td class="name" nowrap><a href="#pT.setTable">pT.setTable</a>&nbsp;(t, i, t1)</td>
+	<td class="summary">Copies the array elements of prudentTable t1 into the array-component of prudentTable t starting at index i Array-size must be able to accomodate the list as it does not grow automatically.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#pT.tableKeys">pT.tableKeys</a>&nbsp;(t)</td>
 	<td class="summary">Returns a list of all the "lua-defined" keys in table t </td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#prudentTable.unpack">prudentTable.unpack</a>&nbsp;(t, b, e)</td>
-	<td class="summary">Unpacks a table-array (from a previously packed-list) into a new list of values.</td>
+	<td class="name" nowrap><a href="#pT.tableKeysTable">pT.tableKeysTable</a>&nbsp;(t)</td>
+	<td class="summary">Returns a table with a list of all the "lua-defined" keys in table t </td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#pT.unpack">pT.unpack</a>&nbsp;(t, b, e)</td>
+	<td class="summary">Unpacks and returns the array-component of prudentTable t as a list of values (table.unpack() replacement).</td>
 	</tr>
 
 	<tr>
@@ -290,16 +270,16 @@ Local helper function for "arrayPairs()"
 
 
 
-<dt><a name="prudentTable.aAdd"></a><strong>prudentTable.aAdd</strong>&nbsp;(t, ...)</dt>
+<dt><a name="pT.add"></a><strong>pT.add</strong>&nbsp;(t, ...)</dt>
 <dd>
-Extends and adds a list of values at the end of the array-component of table t. Array-size is increased to accomodate the list of values. (nils are added)
+Extends and adds a list of values at the end of the array-component of prudentTable t. Array-size is increased to accomodate the list of values. (nils are added)
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: a table instance
+	  t: prudentTable
 	</li>
 	
 	<li>
@@ -314,7 +294,7 @@ Extends and adds a list of values at the end of the array-component of table t. 
 
 
 <h3>Return value:</h3>
-modified table t
+modified prudentTable t
 
 
 
@@ -323,20 +303,20 @@ modified table t
 
 
 
-<dt><a name="prudentTable.aAddTable"></a><strong>prudentTable.aAddTable</strong>&nbsp;(t, t1)</dt>
+<dt><a name="pT.addTable"></a><strong>pT.addTable</strong>&nbsp;(t, t1)</dt>
 <dd>
-Extends and adds the array elements of t1 at the end of the array-component of table t. Array-size is increased to accomodate the list of values. (nils are added)
+Extends and adds the array elements of prudentTable t1 at the end of the array-component of prudentTable t. Array-size is increased to accomodate the list of values. (nil-friendly)
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: a table instance (target)
+	  t: prudentTable (target)
 	</li>
 	
 	<li>
-	  t1: table instance (source)
+	  t1: prudentTable (source)
 	</li>
 	
 </ul>
@@ -347,7 +327,7 @@ Extends and adds the array elements of t1 at the end of the array-component of t
 
 
 <h3>Return value:</h3>
-modified table t
+modified prudentTable t
 
 
 
@@ -356,285 +336,7 @@ modified table t
 
 
 
-<dt><a name="prudentTable.aGet"></a><strong>prudentTable.aGet</strong>&nbsp;(t, b, n)</dt>
-<dd>
-Returns n element values as a list, starting at index b of table t. Range must not extend array boundaries. May return default values if so registered for t.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: a table instance
-	</li>
-	
-	<li>
-	  b: start of range (>=1)
-	</li>
-	
-	<li>
-	  n: number of element-values to return - b+n-1 <= len(t) - n default to 1 - n may be 0
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-one or more values (including possible nils)
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.aGetTable"></a><strong>prudentTable.aGetTable</strong>&nbsp;(t, b, n)</dt>
-<dd>
-Returns n element values as a new table, starting at index b of table t. Range must not extend array boundaries. May return default values if so registered for t.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: a table instance
-	</li>
-	
-	<li>
-	  b: start of range (>=1)
-	</li>
-	
-	<li>
-	  n: number of element-values to return - b+n-1 <= len(t) - n default to 1 - n may be 0
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-new table with requested values (including possible nils)
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.aInsert"></a><strong>prudentTable.aInsert</strong>&nbsp;(t, b, ...)</dt>
-<dd>
-Extends and inserts a list of values at index b of table t. Array-size is increased to accomodate the list of values. Existing elements are moved-up - no values are overwritten. (nils are added)
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: a table instance
-	</li>
-	
-	<li>
-	  b: Starting index for insertion
-	</li>
-	
-	<li>
-	  ...: list of zero, one or more values
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.aInsertTable"></a><strong>prudentTable.aInsertTable</strong>&nbsp;(t, b, t1)</dt>
-<dd>
-Extends and inserts the array-elements of table t2 at index b of table t. Array-size is increased to accomodate the list of values. Existing elements are moved-up - no values are overwritten. (nils are added)
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: a table instance (target)
-	</li>
-	
-	<li>
-	  b: Starting index for insertion
-	</li>
-	
-	<li>
-	  t1: table (source)
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.aRemove"></a><strong>prudentTable.aRemove</strong>&nbsp;(t, b, n)</dt>
-<dd>
-Removes n elements from table t starting with index b, and decreases the array size accordingly. (does not treat elements with nil-value special)
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: an table instance
-	</li>
-	
-	<li>
-	  b: Starting index for removal.
-	</li>
-	
-	<li>
-	  n: Number of elements to remove. (default is 1, may be 0)
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.aRemoveTable"></a><strong>prudentTable.aRemoveTable</strong>&nbsp;(t, b, n)</dt>
-<dd>
-Removes n elements from table t starting with index b, and decreases the array size accordingly. (does not treat elements with nil-value special)
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: an table instance
-	</li>
-	
-	<li>
-	  b: Starting index for removal.
-	</li>
-	
-	<li>
-	  n: Number of elements to remove. (default is 1, may be 0)
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.aSet"></a><strong>prudentTable.aSet</strong>&nbsp;(t, b, ...)</dt>
-<dd>
-Copies a list of values into the array-component of table t starting at index b Array-size must be able to accomodate the list as it does not grow automatically.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: an table instance
-	</li>
-	
-	<li>
-	  b: target start-index
-	</li>
-	
-	<li>
-	  ...: list of zero, one or more values
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.aSetTable"></a><strong>prudentTable.aSetTable</strong>&nbsp;(t, b, t1)</dt>
-<dd>
-Copies the array elements of t1 into the array-component of table t starting at index b Array-size must be able to accomodate the list as it does not grow automatically.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: an table instance (target)
-	</li>
-	
-	<li>
-	  b: target start-index
-	</li>
-	
-	<li>
-	  t1: a table instance (source)
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.arrayPairs"></a><strong>prudentTable.arrayPairs</strong>&nbsp;(t, i)</dt>
+<dt><a name="pT.arrayPairs"></a><strong>pT.arrayPairs</strong>&nbsp;(t, i)</dt>
 <dd>
 ipairs-replacement that handles nil values for an prudentTable's array-component and iterates from t[1] till t[len(t)]
 
@@ -664,76 +366,16 @@ ipairs-replacement that handles nil values for an prudentTable's array-component
 
 
 
-<dt><a name="prudentTable.atablenext"></a><strong>prudentTable.atablenext</strong>&nbsp;(t, k)</dt>
+<dt><a name="pT.copy"></a><strong>pT.copy</strong>&nbsp;(t)</dt>
 <dd>
-Pairs-like iterator that excludes any k that are array indices - only iterates over the map-component of the prudentTable.
+Returns a (shallow) copy of prudentTable t.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: 
-	</li>
-	
-	<li>
-	  k: 
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.atablepairs"></a><strong>prudentTable.atablepairs</strong>&nbsp;(t, i)</dt>
-<dd>
-Pairs-like iterator that includes all assigned keys - Ignores array entries with nil values.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: 
-	</li>
-	
-	<li>
-	  i: 
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.getArrayDefault"></a><strong>prudentTable.getArrayDefault</strong>&nbsp;(t)</dt>
-<dd>
-Returns the registered default array value for table t
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: table
+	  t: prudentTable
 	</li>
 	
 </ul>
@@ -744,7 +386,7 @@ Returns the registered default array value for table t
 
 
 <h3>Return value:</h3>
-Registered value (any type - nil is default)
+a new prudentTable - shallow copy of t
 
 
 
@@ -753,7 +395,152 @@ Registered value (any type - nil is default)
 
 
 
-<dt><a name="prudentTable.isAIndex"></a><strong>prudentTable.isAIndex</strong>&nbsp;(t, k)</dt>
+<dt><a name="pT.get"></a><strong>pT.get</strong>&nbsp;(t, i, n)</dt>
+<dd>
+Returns n element values as a list, starting at index i of prudentTable t. Range must not extend array boundaries.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t: prudentTable
+	</li>
+	
+	<li>
+	  i: start of range (>=1)
+	</li>
+	
+	<li>
+	  n: number of element-values to return - i+n-1 <= len(t) - n default to 1 - n may be 0
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+list of zero, one or more values (including possible nils)
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.getTable"></a><strong>pT.getTable</strong>&nbsp;(t, i, n)</dt>
+<dd>
+Returns n element values as a new prudentTable, starting at index i of prudentTable t. Range must not extend array boundaries.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t: prudentTable
+	</li>
+	
+	<li>
+	  i: start of range (>=1)
+	</li>
+	
+	<li>
+	  n: number of element-values to return - i+n-1 <= len(t) - n default to 1 - n may be 0
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+new prudentTable with requested values in the array-component (including possible nils)
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.insert"></a><strong>pT.insert</strong>&nbsp;(t, i, ...)</dt>
+<dd>
+Extends and inserts a list of values at index i of prudentTable t. Array-size is increased to accomodate the list of values. Existing elements are moved-up - no values are overwritten. (nil-friendly)
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t: prudentTable
+	</li>
+	
+	<li>
+	  i: Starting index for insertion
+	</li>
+	
+	<li>
+	  ...: list of zero, one or more values
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+modified prudentTable t
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.insertTable"></a><strong>pT.insertTable</strong>&nbsp;(t, i, t1)</dt>
+<dd>
+Extends and inserts the array-elements of prudentTable t1 at index i of prudentTable t. Array-size is increased to accomodate the list of values. Existing elements are moved-up - no values are overwritten. (nil-friendly)
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t: prudentTable (target)
+	</li>
+	
+	<li>
+	  i: Starting index for insertion
+	</li>
+	
+	<li>
+	  t1: prudentTable (source)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.isIndex"></a><strong>pT.isIndex</strong>&nbsp;(t, k)</dt>
 <dd>
 Returns whether the key k is a valid index for the array-component of table t
 
@@ -786,24 +573,16 @@ boolean - true indicates k is integer and 1 <= k <= len(t)
 
 
 
-<dt><a name="prudentTable.isPermKey"></a><strong>prudentTable.isPermKey</strong>&nbsp;(t, k, pk)</dt>
+<dt><a name="pT.isLuaTableLenOK"></a><strong>pT.isLuaTableLenOK</strong>&nbsp;(lt)</dt>
 <dd>
-Returns whether key k is registered as a permanent key for table t.
+Returns whether the Lua table lt's length may be ambiguous by comparing lt's non-nil array size (nonNilLen(t)) with #lt. This could be a determination whether the #t is the length to use for an unknown table.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: table
-	</li>
-	
-	<li>
-	  k: 
-	</li>
-	
-	<li>
-	  pk: key (anything but nil)
+	  lt: A "standard" lua-table
 	</li>
 	
 </ul>
@@ -814,7 +593,7 @@ Returns whether key k is registered as a permanent key for table t.
 
 
 <h3>Return value:</h3>
-Boolean
+Boolean: true if non-nil length equals #
 
 
 
@@ -823,9 +602,9 @@ Boolean
 
 
 
-<dt><a name="prudentTable.isPrudentTable"></a><strong>prudentTable.isPrudentTable</strong>&nbsp;(t)</dt>
+<dt><a name="pT.isPrudentTable"></a><strong>pT.isPrudentTable</strong>&nbsp;(t)</dt>
 <dd>
-Returns whether the t has been managed as a prudentTable. (only tests whether len(t) has ever been set - no guarantees about "integrity")
+Returns whether the t has registered as a prudentTable. (only tests whether len(t) has ever been set - no guarantees about "integrity")
 
 
 <h3>Parameters</h3>
@@ -843,7 +622,7 @@ Returns whether the t has been managed as a prudentTable. (only tests whether le
 
 
 <h3>Return value:</h3>
-boolean - true indicates t has been managed as a prudentTable
+boolean - true indicates t has registered as a prudentTable
 
 
 
@@ -852,33 +631,7 @@ boolean - true indicates t has been managed as a prudentTable
 
 
 
-<dt><a name="prudentTable.isTableLenOK"></a><strong>prudentTable.isTableLenOK</strong>&nbsp;(lt)</dt>
-<dd>
-Returns whether the Lua table lt's length may be ambiguous by comparing lt's non-nil array size with #lt param lt A "standard" table return Boolean: true if non-nil length equals #
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  lt: 
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.keyExists"></a><strong>prudentTable.keyExists</strong>&nbsp;(t, k)</dt>
+<dt><a name="pT.keyExists"></a><strong>pT.keyExists</strong>&nbsp;(t, k)</dt>
 <dd>
 Returns whether a key k exists in table t. A key k exists when: * it has a normal map entry where a non-nil value is returned for t[k] * it has been registered as a "permanent key"  - may have nil value * key is valid array index: k is integer and 0 < k <= len(t)
 
@@ -911,16 +664,16 @@ Boolean indicating whether k is an existing key for table t
 
 
 
-<dt><a name="prudentTable.len"></a><strong>prudentTable.len</strong>&nbsp;(t)</dt>
+<dt><a name="pT.len"></a><strong>pT.len</strong>&nbsp;(t)</dt>
 <dd>
-Returns the length/size of the array component of table t
+Returns the registered length/size of the array component of prudentTable t
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: An table instance - will throw exception if other type
+	  t: prudentTable
 	</li>
 	
 </ul>
@@ -931,7 +684,7 @@ Returns the length/size of the array component of table t
 
 
 <h3>Return value:</h3>
-Integer >= 0 indicating the size of ATAble's array
+Integer >= 0 indicating the size/length of t's array-component
 
 
 
@@ -940,7 +693,36 @@ Integer >= 0 indicating the size of ATAble's array
 
 
 
-<dt><a name="prudentTable.mapKeys"></a><strong>prudentTable.mapKeys</strong>&nbsp;(t)</dt>
+<dt><a name="pT.listPairs"></a><strong>pT.listPairs</strong>&nbsp;(...)</dt>
+<dd>
+Iterator for varargs (friendly to nils).
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  ...: vararg list (may include nils)
+	</li>
+	
+</ul>
+
+
+
+
+<h3>Usage:</h3>
+function f(...) for i,a in apairs(...) do print(i, a) end end
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.mapKeys"></a><strong>pT.mapKeys</strong>&nbsp;(t)</dt>
 <dd>
 Returns a list of all the keys of the map-component of table t
 
@@ -966,7 +748,33 @@ Returns a list of all the keys of the map-component of table t
 
 
 
-<dt><a name="prudentTable.mapnext"></a><strong>prudentTable.mapnext</strong>&nbsp;(t, k)</dt>
+<dt><a name="pT.mapKeysTable"></a><strong>pT.mapKeysTable</strong>&nbsp;(t)</dt>
+<dd>
+Returns a table with a list of all the keys of the map-component of table t
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.mapNext"></a><strong>pT.mapNext</strong>&nbsp;(t, k)</dt>
 <dd>
 Pairs-like iterator that excludes any k that are array indices - Only iterates over the map-component of the prudentTable.
 
@@ -996,7 +804,7 @@ Pairs-like iterator that excludes any k that are array indices - Only iterates o
 
 
 
-<dt><a name="prudentTable.mappairs"></a><strong>prudentTable.mappairs</strong>&nbsp;(t, i)</dt>
+<dt><a name="pT.mapPairs"></a><strong>pT.mapPairs</strong>&nbsp;(t, i)</dt>
 <dd>
 Pairs-like iterator that excludes any k that are array indices - only iterates over the map-component of the prudentTable.
 
@@ -1026,64 +834,9 @@ Pairs-like iterator that excludes any k that are array indices - only iterates o
 
 
 
-<dt><a name="prudentTable.nonNilLen"></a><strong>prudentTable.nonNilLen</strong>&nbsp;(t)</dt>
+<dt><a name="pT.nonNilLen"></a><strong>pT.nonNilLen</strong>&nbsp;(t)</dt>
 <dd>
 Returns the non-nil length/size of the array component of a standard Lua table Simply loops from index 1 until the first nil-valued element. Note that this function does not set any length/size for t, but merely scans.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: table return size of non-nil array (integer >= 0)
-	</li>
-	
-</ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.pack"></a><strong>prudentTable.pack</strong>&nbsp;(...)</dt>
-<dd>
-Replacement for the table constructor pack(), which takes a list of arguments and adds them as array-elements of a new array. This pack registers the array length and also uses the "convention" of adding an entry: n = select('#', ...). (the latter is NOT used by prudentTable - just trying to play nice...)
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  ...: List of elements to add to the array-component of the newly created table
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-Newly created table instance
-
-
-
-</dd>
-
-
-
-
-<dt><a name="prudentTable.permKeys"></a><strong>prudentTable.permKeys</strong>&nbsp;(t)</dt>
-<dd>
-Returns a list of all registered permanent keys for table t.
 
 
 <h3>Parameters</h3>
@@ -1101,7 +854,7 @@ Returns a list of all registered permanent keys for table t.
 
 
 <h3>Return value:</h3>
-List of keys
+size of non-nil array (integer >= 0)
 
 
 
@@ -1110,7 +863,36 @@ List of keys
 
 
 
-<dt><a name="prudentTable.rarrayPairs"></a><strong>prudentTable.rarrayPairs</strong>&nbsp;(t, i)</dt>
+<dt><a name="pT.pack"></a><strong>pT.pack</strong>&nbsp;(...)</dt>
+<dd>
+prudentTable constructor (table.pack() replacement), which copies the list arguments into the array-component of the newly created prudentTable. Registers the "correct" argument list size for the array-length. (nil-friendly) Uses the "convention" of adding an entry: n = select('#', ...). (however, the latter is NOT used by any prudentTable-function - just trying to play nice...)
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  ...: List of elements to add to the array-component of the newly created table
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+Newly created prudentTable instance
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.rarrayPairs"></a><strong>pT.rarrayPairs</strong>&nbsp;(t, i)</dt>
 <dd>
 reverse ipairs-replacement that handles nil values for an prudentTable's array-component and iterates down from t[len(t)] till t[1].
 
@@ -1140,20 +922,24 @@ reverse ipairs-replacement that handles nil values for an prudentTable's array-c
 
 
 
-<dt><a name="prudentTable.removePermKey"></a><strong>prudentTable.removePermKey</strong>&nbsp;(t, pk)</dt>
+<dt><a name="pT.remove"></a><strong>pT.remove</strong>&nbsp;(t, i, n)</dt>
 <dd>
-Unregister/remove key pk as a permanent key for table t.
+Removes n elements from prudentTable t starting with index i, returns those removed element values as a list, and decreases t's array size accordingly. (nil-friendly)
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: table
+	  t: prudentTable (changed inplace)
 	</li>
 	
 	<li>
-	  pk: key (anything but nil)
+	  i: Starting index for removal.
+	</li>
+	
+	<li>
+	  n: Number of elements to remove. (default is 1, may be 0)
 	</li>
 	
 </ul>
@@ -1164,7 +950,7 @@ Unregister/remove key pk as a permanent key for table t.
 
 
 <h3>Return value:</h3>
-unmodified table t
+List of removed element value(s)
 
 
 
@@ -1173,20 +959,16 @@ unmodified table t
 
 
 
-<dt><a name="prudentTable.setArrayConstraint"></a><strong>prudentTable.setArrayConstraint</strong>&nbsp;(t, aPreCondFun)</dt>
+<dt><a name="pT.removeNils"></a><strong>pT.removeNils</strong>&nbsp;(t)</dt>
 <dd>
-Register a constraint/precondition for the array elements of table t.
+Removes all the elements with nil-values from the array-component of prudentTable t.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: table
-	</li>
-	
-	<li>
-	  aPreCondFun: a function aPreCondFun(value,index,table) that returns boolean,value
+	  t: prudentTable
 	</li>
 	
 </ul>
@@ -1197,7 +979,7 @@ Register a constraint/precondition for the array elements of table t.
 
 
 <h3>Return value:</h3>
-Unmodified table t
+(possibly modified) prudentTable t
 
 
 
@@ -1206,20 +988,24 @@ Unmodified table t
 
 
 
-<dt><a name="prudentTable.setArrayDefault"></a><strong>prudentTable.setArrayDefault</strong>&nbsp;(t, dv)</dt>
+<dt><a name="pT.removeTable"></a><strong>pT.removeTable</strong>&nbsp;(t, i, n)</dt>
 <dd>
-Register a default array value dv for table t.
+Removes n elements from prudentTable t starting with index i, returns those removed element values as a new prudentTable, and decreases t's array size accordingly. (nil-friendly)
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: table
+	  t: prudentTable (changed inplace)
 	</li>
 	
 	<li>
-	  dv: Any value (default for default is nil - also used to "reset")
+	  i: Starting index for removal.
+	</li>
+	
+	<li>
+	  n: Number of elements to remove. (default is 1, may be 0)
 	</li>
 	
 </ul>
@@ -1230,7 +1016,7 @@ Register a default array value dv for table t.
 
 
 <h3>Return value:</h3>
-unmodified table t
+New prudentTable with removed element value(s) in the array component.
 
 
 
@@ -1239,16 +1025,53 @@ unmodified table t
 
 
 
-<dt><a name="prudentTable.setLen"></a><strong>prudentTable.setLen</strong>&nbsp;(t, n, pedantic)</dt>
+<dt><a name="pT.set"></a><strong>pT.set</strong>&nbsp;(t, i, ...)</dt>
 <dd>
-Set the length/size of the array component of table t. If size is increased, it may make existing map entries become part of the array. I size is decreased, then some array components may become map entries No entries or values are deleted or nil'ed
+Copies a list of values into the array-component of prudentTable t starting at index i Array-size must be able to accomodate the list as it does not grow automatically.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: An table instance - will throw exception if other type
+	  t: prudentTable
+	</li>
+	
+	<li>
+	  i: target start-index
+	</li>
+	
+	<li>
+	  ...: list of zero, one or more values
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+modified prudentTable t
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.setLen"></a><strong>pT.setLen</strong>&nbsp;(t, n, resetValues)</dt>
+<dd>
+Set the length/size of the array component of table t and registers t as a prudentTable. Thru pT.setLen(), a Lua-table t is "registered" as a prudentTable. If size is increased, then existing map entries become part of the array. If size is decreased, then some array components become map entries. If resetValues==true then all new array/map elements get reset to nil. This reset is to avoid any inconsistencies caused by unexpected new map/array elements.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t: An standard lua-table or prudentTable
 	</li>
 	
 	<li>
@@ -1256,7 +1079,7 @@ Set the length/size of the array component of table t. If size is increased, it 
 	</li>
 	
 	<li>
-	  pedantic: 
+	  resetValues: boolean (default true) - resets new array or map elements to nil.
 	</li>
 	
 </ul>
@@ -1264,7 +1087,19 @@ Set the length/size of the array component of table t. If size is increased, it 
 
 
 
+<h3>Usage</h3>
+<ul>
+	
+	<li>local t = pT.setLen({a="a", b="b", 1,2,3,nil}, 4, false)
+	
+	<li>t = pT.setLen(t,5) ; pT.set(t,5,"five")
+	
+</ul>
 
+
+
+<h3>Return value:</h3>
+prudentTable t (possibly modified - depending on n and resetValues)
 
 
 
@@ -1273,20 +1108,24 @@ Set the length/size of the array component of table t. If size is increased, it 
 
 
 
-<dt><a name="prudentTable.setPermKey"></a><strong>prudentTable.setPermKey</strong>&nbsp;(t, ...)</dt>
+<dt><a name="pT.setTable"></a><strong>pT.setTable</strong>&nbsp;(t, i, t1)</dt>
 <dd>
-Register one or more keys as permanent keys for table t.
+Copies the array elements of prudentTable t1 into the array-component of prudentTable t starting at index i Array-size must be able to accomodate the list as it does not grow automatically.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: table
+	  t: prudentTable (target)
 	</li>
 	
 	<li>
-	  ...: one or more keys (anything but nil)
+	  i: target start-index
+	</li>
+	
+	<li>
+	  t1: prudentTable (source)
 	</li>
 	
 </ul>
@@ -1296,9 +1135,6 @@ Register one or more keys as permanent keys for table t.
 
 
 
-<h3>Return value:</h3>
-unmodified table t
-
 
 
 </dd>
@@ -1306,7 +1142,7 @@ unmodified table t
 
 
 
-<dt><a name="prudentTable.tableKeys"></a><strong>prudentTable.tableKeys</strong>&nbsp;(t)</dt>
+<dt><a name="pT.tableKeys"></a><strong>pT.tableKeys</strong>&nbsp;(t)</dt>
 <dd>
 Returns a list of all the "lua-defined" keys in table t
 
@@ -1332,24 +1168,50 @@ Returns a list of all the "lua-defined" keys in table t
 
 
 
-<dt><a name="prudentTable.unpack"></a><strong>prudentTable.unpack</strong>&nbsp;(t, b, e)</dt>
+<dt><a name="pT.tableKeysTable"></a><strong>pT.tableKeysTable</strong>&nbsp;(t)</dt>
 <dd>
-Unpacks a table-array (from a previously packed-list) into a new list of values. Note that unpack relies on proper predentTable.setLen() registration, either thru prudentTable.pack() or some other prudentTable-function. It does NOT use any "t.n" that may be used to indicates the array-length. May return default values if so registered for t.
+Returns a table with a list of all the "lua-defined" keys in table t
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: table instance
+	  t: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.unpack"></a><strong>pT.unpack</strong>&nbsp;(t, b, e)</dt>
+<dd>
+Unpacks and returns the array-component of prudentTable t as a list of values (table.unpack() replacement). pT.unpack does NOT use any "t.n" that may be used to indicates the array-length.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t: prudentTable
 	</li>
 	
 	<li>
-	  b: start of range to copy - default to 1
+	  b: start of range to copy - defaults to 1
 	</li>
 	
 	<li>
-	  e: end of range to copy - defaults to len(t)
+	  e: end of range to copy - defaults to pT.len(t)
 	</li>
 	
 </ul>
