@@ -2,10 +2,14 @@ local pT = require("prudentTable")
 
 pp = function(t)
 	local s = ""
-	s = "%"..pT.len(t).." {"
+	s = "%"..pT.len(t).."%"..pT.mapLen(t).."%"..pT.tableLen(t).." {"
 	for i,v in pT.arrayPairs(t) do
-		if i ~= 1 then s = s .."," end
-		s = s .. i.. ": \"" .. tostring(v).."\""
+		if i ~= 1 then s = s ..", " end
+		if type(v)~="number" then 
+			if v == nil then v = tostring(v)
+			else v = "\""..tostring(v).."\"" end
+		end
+		s = s .. i.. ":" .. v ..""
 	end
 	s = s .. " }"
 	print(s)
@@ -22,7 +26,7 @@ pp(t)
 t = {"one","two","three"}
 --print(#t)
 --pp(t)
-pT.setLen(t,3, false)
+t = pT.setLen(t,3, false)
 pp(t)
 
 t = pT.setLen({a="a", b="b", 1,2,3,nil,c="c"}, 4, false)
@@ -42,11 +46,15 @@ print("pT.isIndex(t,1.4)",pT.isIndex(t,1.4))
 print("pT.isIndex(t,\"3\")",pT.isIndex(t,"3"))
 for i,v in pT.rarrayPairs(t2) do print(i,v) end
 
-print("add")
+print("insert")
 pp(t2)
-pT.add(t2,"eight",nil,"ten")
+pT.insert(t2,"eight")
 pp(t2)
-pT.add(t2)
+pT.insert(t2,8,"seven")
+pp(t2)
+pT.insertL(t2,nil,"eight",nil,"ten")
+pp(t2)
+pT.insert(t2)
 pp(t2)
 
 print("remove")
@@ -59,19 +67,31 @@ pp(t2)
 print("remove(t2,1,pT.len(t2))",pT.remove(t2,1,pT.len(t2)))
 pp(t2)
 
+print("#{1,2,3,nil,5,nil,nil,8}",#{1,2,3,nil,5,nil,nil,8})
+print("#{1,2,3,nil,nil,6,7,8}",#{1,2,3,nil,nil,6,7,8})
+print("#{1,2,3,nil,nil,nil,nil,8}",#{nil,nil,nil,4,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,8,nil,nil,nil,nil,nil,nil,nil,10})
+print("#{1,2,3,nil,5,nil,nil,8,nil}",#{1,2,3,nil,5,nil,nil,8,nil})
+
+
+print("table.insert")
+local ti = {1,2,3,nil,5,nil,nil,8,nil}
+print(#ti,ti[1],ti[2],ti[3],ti[4],ti[5],ti[6],ti[7],ti[8],ti[9],ti[10])
+print(table.insert(ti,2,"a"))
+print(#ti,ti[1],ti[2],ti[3],ti[4],ti[5],ti[6],ti[7],ti[8],ti[9],ti[10])
+
 print("insert")
 pp(t2)
-pT.insert(t2,1,"one")
+pT.insertL(t2,1,"one")
 pp(t2)
-pT.insert(t2,1,"before one")
+pT.insertL(t2,1,"before one")
 pp(t2)
-pT.insert(t2,1,"-2-one", "-3-one")
+pT.insertL(t2,1,"-2-one", "-3-one")
 pp(t2)
-pT.insert(t2,pT.len(t2),"before last")
+pT.insertL(t2,pT.len(t2),"before last")
 pp(t2)
-pT.insert(t2,3,"-2 one", "-3 one")
+pT.insertL(t2,3,"-2 one", "-3 one")
 pp(t2)
-print(pcall(pT.insert, t2,-3,"-2 one", "-3 one"))
+print(pcall(pT.insertL, t2,-3,"-2 one", "-3 one"))
 
 print("unpack",pT.unpack(pT.pack(1,2),1,2))
 local t3 = pT.pack(1,2,3)
@@ -83,7 +103,7 @@ t3.n=nil
 print(pT.mapKeys(t3))
 
 local s = "{"
-for k,v in pairs(pT) do
+for k,v in pairs(table) do
 	s = s ..","..k.."="..k
 end
 s = s.."}"
@@ -107,7 +127,43 @@ pp(t10)
 pp(pT.removeNils(t10))
 
 print("setLen")
-pp(pT.setLen({a="a", b="b", 1,2,3,nil}, 4, true))
+pp(pT.setLen({a="a", b="b", 1,2,3,nil}, 4))
 
-print("End")
+print("setn/getn")
+t22 = {1,2,3,4}
+print(#t22,table.getn(t22))
+-- table.setn(t22,10)
+t22[#t22+1]=5
+print(#t22,table.getn(t22))
+t22[3]=nil
+print(#t22,table.getn(t22))
+t22[4]=nil
+print(#t22,table.getn(t22))
+
+print("#madness")
+t1 = { 'foo', nil, 'bar' }
+print(#t1)
+--3
+t2 = {}
+t2[1] = 'foo'
+t2[2] = nil
+t2[3] = 'bar'
+print(#t2)
+--1
+a = {1,2,3,nil,nil,6}
+b = {}
+b[1] = 1
+b[2] = 2
+b[3] = 3
+b[6] = 6
+print (#a,#b)
+--6       3
+
+print("mapPairs")
+m1 = pT.registerPTable({1,2,3,a="A",b="B",4},4)
+pp(m1)
+for k,v in pT.mapPairs(m1) do print("k,v",k,v) end
+
+
+print("Einde")
 

@@ -18,15 +18,15 @@ Do's:
 
 *  All tables returned by any of the pTable functions has been properly registered (even the empty-tables).
 *  Use pT.pack(...) as your generic array-table constructor
-*  "Normally" you will see no or little need to explicitly register a table size, because all the pTable functions that need to, will do it for you.
+*  "Normally" you will see no or little need to explicitly register an updated table size before or after table-operations, because all the pTable functions that need to, will do it for you.
 *  If you have to set the length for table t, because the size is unknown or different from the registered one, use pT.setLen(t,n)
 *  Use pT.get(t,i) instead of t[i] if you care about array-boundary checking when you want to get an array-component's value by index
-*  Use pT.set(t,i,v) instead of t[i]=v if you care about array-boundary checking when you want to set an array-component's value by index. Note that if t[i]=v is assigned to an element outside of the range 1 <= i <= pT.len(t), then your array is **NOT** automatically resized (hint: use pT.aAdd() for adding to the end of an array).
+*  Use pT.set(t,i,v) instead of t[i]=v if you care about array-boundary checking when you want to set an array-component's value by index. Note that if t[i]=v is assigned to an element outside of the range 1 <= i <= pT.len(t), then your array is **NOT** automatically resized (hint: use pT.append() for adding to the end of an array).
 
 Don't's:
 
 *  **Never ever** use #t, but instead use pT.len(t)
-*  **Never ever** use t[#t+1]=obj to add, but instead use pT.aAdd(t,obj)
+*  **Never ever** use t[#t+1]=obj to add, but instead use pT.append(t,obj)
 *  Do not use {}, but instead use the table constructer "pT.pack()"such that the resulting (empty-) table is properly registered with size 0.
 *  Do not use the Lua-standard functions ipairs, table.insert, table.remove - use the pTable provided alternatives: pT.arrayPairs, pT.rarrayPairs, pT.insert, pT.remove
 
@@ -96,9 +96,10 @@ References
 ----------
 The following links show where some of the ideas came from. Thanks to the respective authors for their willingness to share.
 
-* David Manura, "array of keys in table", ("http://snippets.luacode.org/?p=snippets/array_of_keys_in_table_77")
-* Steve Donovan, "Iterating over the hash part of a table", ("http://snippets.luacode.org/?p=snippets/Iterating_over_the_hash_part_of_a_table_6") 
-* Steve Donovan, "Insert Values from one table into another" ("http://snippets.luacode.org/?p=snippets/tInsert_Values_from_one_table_into_another_25")
-* David Manura, "Storing Nils In Tables", ("http://lua-users.org/wiki/StoringNilsInTables")
-
-
+*  David Manura, "array of keys in table", ("http://snippets.luacode.org/?p=snippets/array_of_keys_in_table_77")
+*  Steve Donovan, "Iterating over the hash part of a table", ("http://snippets.luacode.org/?p=snippets/Iterating_over_the_hash_part_of_a_table_6") 
+*  Steve Donovan, "Insert Values from one table into another" ("http://snippets.luacode.org/?p=snippets/tInsert_Values_from_one_table_into_another_25")
+*  David Manura, "Storing Nils In Tables", ("http://lua-users.org/wiki/StoringNilsInTables")
+*  David Manura, "apairs()", http://lua-users.org/lists/lua-l/2007-08/msg00359.html
+* various,"Lua Table Size",http://lua-users.org/wiki/LuaTableSize
+*  "old Lua PIL - Programming in Lua (first edition) 2003", http://www.lua.org/pil/19.1.html
