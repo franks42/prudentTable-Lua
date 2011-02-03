@@ -26,10 +26,10 @@ pp(t)
 t = {"one","two","three"}
 --print(#t)
 --pp(t)
-t = pT.setLen(t,3, false)
+t = pT.regPTable(t,3)
 pp(t)
 
-t = pT.setLen({a="a", b="b", 1,2,3,nil,c="c"}, 4, false)
+t = pT.regPTable({a="a", b="b", 1,2,3,nil,c="c"}, 4)
 print("t:",t.a,t.b,t.c,#t,pT.len(t))
 pp(t)
 
@@ -37,7 +37,7 @@ t2 = pT.pack("one","two","three")
 pp(t2)
 t2 = pT.pack(nil,"two",nil)
 pp(t2)
-pT.setLen(t2,7)
+pT.regPTable(t2,7)
 pp(t2)
 print("pT.isIndex(t,0)",pT.isIndex(t,0))
 print("pT.isIndex(t,1)",pT.isIndex(t,1))
@@ -126,8 +126,8 @@ print("removeNils")
 pp(t10)
 pp(pT.removeNils(t10))
 
-print("setLen")
-pp(pT.setLen({a="a", b="b", 1,2,3,nil}, 4))
+print("pT.regPTable")
+pp(pT.regPTable({a="a", b="b", 1,2,3,nil}, 4))
 
 print("setn/getn")
 t22 = {1,2,3,4}
@@ -160,10 +160,33 @@ print (#a,#b)
 --6       3
 
 print("mapPairs")
-m1 = pT.registerPTable({1,2,3,a="A",b="B",4},4)
+m1 = pT.regPTable({1,2,3,a="A",b="B",4},4)
 pp(m1)
 for k,v in pT.mapPairs(m1) do print("k,v",k,v) end
 
 
+print("pT.arrayPairsSkipNil")
+local t33 = pT.pack("a","b",nil,"d",nil)
+for i,v in pT.arrayPairs(t33) do print(i,v) end 
+for i,v in pT.rarrayPairs(t33) do print(i,v) end 
+for i,v in pT.arrayPairsSkipNil(t33) do print(i,v) end 
+for i,v in pT.listPairs("a","b",nil,"d",nil) do print(i,v) end 
+for i,v in pT.listPairsSkipNil("a","b",nil,"d",nil) do print(i,v) end 
+
+t33.jaja=t10; t33.nee=pT.pack();t33.nee.janee=pT.pack();t33.nee.janee1=t33;t33[pT.pack()]=1
+
+print("pT.deepCopy(t, trefs)")
+for k,v in pairs(t33) do print(k,v) end
+local t44 = pT.deepCopy(t33)
+for k,v in pairs(t44) do print(k,v) end
+
+print("pT.deepCompare")
+print("t33==t44",pT.deepCompare(t33,t44))
+local d1 = {};d1["z"]=d1; d1[1]=d1;d1[2]=2
+local d2 = {};d2["z"]=d2; d2[1]=d2;d2[2]=2
+print("dC:",pT.deepCompare({2,{["a"]=4,d1}},{2,{["a"]=4,d2}}))
+print("dC:",pT.deepCompare(d1,d2))
+for k,v in pairs(d1) do print("kv:",k,v) end
+print("dC1:",pT.deepCompare({},{}))
 print("Einde")
 

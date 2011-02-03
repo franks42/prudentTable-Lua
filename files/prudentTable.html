@@ -64,32 +64,47 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.arrayPairs">pT.arrayPairs</a>&nbsp;(t, i)</td>
-	<td class="summary">ipairs-replacement for pTable's array-component that iterates from t[1] till t[len(t)] and will return possible nil-values.</td>
+	<td class="summary">ipairs-replacement for pTable t's array-component that iterates up from t[1] till t[len(t)], and will return possible nil-values.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#pT.arrayPairsSkipNil">pT.arrayPairsSkipNil</a>&nbsp;(t, i)</td>
+	<td class="summary">ipairs-replacement for pTable t's array-component that iterates up from t[1] till t[len(t)], and will skip any nil-values.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#pT.deepCompare">pT.deepCompare</a>&nbsp;(t1, t2)</td>
+	<td class="summary">Returns result from a deep-compare of object t1 and t2 - compare by value for table elements - iterates down the trees - circular and repeated reference detection.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#pT.deepCopy">pT.deepCopy</a>&nbsp;(t)</td>
+	<td class="summary">Returns a deep copy of object t - iterates "down" the tree if t is a table - pTable-aware - multiple&circular reference aware - copy will share metatable with source.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.get">pT.get</a>&nbsp;(t, i)</td>
-	<td class="summary">Returns the element value at index i of pTable t.</td>
+	<td class="summary">Returns the array-element value at index i of pTable t.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#pT.getR">pT.getR</a>&nbsp;(t, b, e)</td>
-	<td class="summary">For the range of index b till e of pTable t, returns the list of element values.</td>
+	<td class="name" nowrap><a href="#pT.getRL">pT.getRL</a>&nbsp;(t, b, e)</td>
+	<td class="summary">For the range of array-index b till e of pTable t, returns the list of element values.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.getRT">pT.getRT</a>&nbsp;(t, b, e)</td>
-	<td class="summary">For the range of index b till e of pTable t, returns an array of element values as a new pTable.</td>
+	<td class="summary">For the range of array-index b till e of pTable t, returns an array of element values as a new pTable.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.insert">pT.insert</a>&nbsp;(t, iOrV, ...)</td>
-	<td class="summary">Extends and inserts a single value at index i of pTable t.</td>
+	<td class="summary">Extends and inserts a single value at index i of pTable t - Array-size is increased by one to accomodate the new entry.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.insertL">pT.insertL</a>&nbsp;(t, i, ...)</td>
-	<td class="summary">Inserts a list of values at index i of pTable t.</td>
+	<td class="summary">Inserts a list of values at index i of pTable t - Array-size is increased to accomodate the list of values.</td>
 	</tr>
 
 	<tr>
@@ -99,12 +114,7 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.isIndex">pT.isIndex</a>&nbsp;(t, k)</td>
-	<td class="summary">Returns whether the key k is a valid index for the array-component of table t </td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#pT.isIndexPlus1">pT.isIndexPlus1</a>&nbsp;(t, k)</td>
-	<td class="summary">Returns whether the key k is a valid index for the array-component of table t including len(t) + 1, which is used by insert() to append to the array.</td>
+	<td class="summary">Returns whether the key k is a valid index for the array-component of pTable t.</td>
 	</tr>
 
 	<tr>
@@ -114,37 +124,37 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.isPTable">pT.isPTable</a>&nbsp;(t)</td>
-	<td class="summary">Returns whether the t has registered as a pTable.</td>
-	</tr>
-
-	<tr>
-	<td class="name" nowrap><a href="#pT.keyExists">pT.keyExists</a>&nbsp;(t, k)</td>
-	<td class="summary">Returns whether a key k exists in table t.</td>
+	<td class="summary">Returns whether the t is registered as a pTable.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.len">pT.len</a>&nbsp;(t)</td>
-	<td class="summary">Returns the registered length/size of the array component of pTable t </td>
+	<td class="summary">Returns length/size of the array component of pTable t.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.lenT">pT.lenT</a>&nbsp;(...)</td>
-	<td class="summary">Returns the total number of elements of the list of pTables.</td>
+	<td class="summary">Returns the sum of the array-lengths of a list of pTables: len(t1)+...+len(tn).</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.listPairs">pT.listPairs</a>&nbsp;(...)</td>
+	<td class="summary">ipairs-like iterator for varargs (friendly to nils).</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#pT.listPairsSkipNil">pT.listPairsSkipNil</a>&nbsp;(...)</td>
 	<td class="summary">Iterator for varargs (friendly to nils).</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.mapKeys">pT.mapKeys</a>&nbsp;(t)</td>
-	<td class="summary">Returns a list of all the keys of the map-component of table t </td>
+	<td class="summary">Returns a list of all the keys of the map-component of pTable t without the array-indices.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#pT.mapKeysTable">pT.mapKeysTable</a>&nbsp;(t)</td>
-	<td class="summary">Returns a table with a list of all the keys of the map-component of table t </td>
+	<td class="name" nowrap><a href="#pT.mapKeysT">pT.mapKeysT</a>&nbsp;(t)</td>
+	<td class="summary">Returns a pTable with a list of all the keys of the map-component of pTable t without the array-indices.</td>
 	</tr>
 
 	<tr>
@@ -154,12 +164,12 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.mapNext">pT.mapNext</a>&nbsp;(t, k)</td>
-	<td class="summary">Pairs-like iterator that excludes any k that are array indices - Only iterates over the map-component of the pTable.</td>
+	<td class="summary">Next-like iterator that excludes any keys k of pTable t that are array indices - Only iterates over the map-component of the pTable.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.mapPairs">pT.mapPairs</a>&nbsp;(t)</td>
-	<td class="summary">Pairs-like iterator that excludes any k that are array indices - only iterates over the map-component of the pTable.</td>
+	<td class="summary">Pairs-like iterator that excludes any keys k of pTable t that are array indices - only iterates over the map-component of the pTable.</td>
 	</tr>
 
 	<tr>
@@ -174,22 +184,22 @@
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.packT">pT.packT</a>&nbsp;(...)</td>
-	<td class="summary">pTable constructor, which copies all the elements of the argument-list of pTable's into the array-component of a newly created pTable.</td>
+	<td class="summary">pTable constructor, which copies all the elements of the argument-list of pTable's into the array-component of a newly created pTable - essentially copies and concatenates the pTable-arrays into a new pTable.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.rarrayPairs">pT.rarrayPairs</a>&nbsp;(t, i)</td>
-	<td class="summary">reverse ipairs-replacement that handles nil values for an pTable's array-component and iterates down from t[len(t)] till t[1].</td>
+	<td class="summary">reverse ipairs-replacement for pTable t's array-component and iterates down from t[len(t)] till t[1], and will return possible nil-values - safe(r) element removal.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#pT.registerPTable">pT.registerPTable</a>&nbsp;(lt, n)</td>
-	<td class="summary">Registers an existing standard Lua table lt as a pTable while providing the length/size n to use.</td>
+	<td class="name" nowrap><a href="#pT.regPTable">pT.regPTable</a>&nbsp;(lt, n)</td>
+	<td class="summary">Registers an existing standard Lua table lt as a pTable while explicitly providing its length/size n.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.remove">pT.remove</a>&nbsp;(t, i)</td>
-	<td class="summary">Removes element from pTable t at index i, returns the removed element's value, and decreases t's array size by one.</td>
+	<td class="summary">Removes array-element from pTable t at index i, and returns the removed element's value - t's array size is decreased by one.</td>
 	</tr>
 
 	<tr>
@@ -198,13 +208,13 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#pT.removeR">pT.removeR</a>&nbsp;(t, b, e)</td>
-	<td class="summary">Removes n elements from pTable t starting with index i, returns those removed element values as a list, and decreases t's array size accordingly.</td>
+	<td class="name" nowrap><a href="#pT.removeRL">pT.removeRL</a>&nbsp;(t, b, e)</td>
+	<td class="summary">Removes the range of array-elements from index b till e from pTable t, and returns those removed elements as a list - t's array size is decreased accordingly.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.removeRT">pT.removeRT</a>&nbsp;(t, b, e)</td>
-	<td class="summary">Removes n elements from pTable t starting with index i, returns those removed element values as a new pTable, and decreases t's array size accordingly.</td>
+	<td class="summary">Removes the range of array-elements from index b till e from pTable t, and returns those removed elements in a new pTable - t's array size is decreased accordingly.</td>
 	</tr>
 
 	<tr>
@@ -218,37 +228,32 @@
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#pT.setLen">pT.setLen</a>&nbsp;(t, n, resetValues)</td>
-	<td class="summary">Set the length/size of the array component of table t and registers t as a pTable.</td>
-	</tr>
-
-	<tr>
 	<td class="name" nowrap><a href="#pT.setT">pT.setT</a>&nbsp;(t, i, ...)</td>
 	<td class="summary">Copies the array elements of pTables t1...tn into the array-component of pTable t starting at index i.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.tableKeys">pT.tableKeys</a>&nbsp;(t)</td>
-	<td class="summary">Returns a list of all the "lua-defined" keys in table t </td>
+	<td class="summary">Returns a list of all the "lua-defined" keys in table t.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#pT.tableKeysTable">pT.tableKeysTable</a>&nbsp;(t)</td>
-	<td class="summary">Returns a table with a list of all the "lua-defined" keys in table t </td>
+	<td class="name" nowrap><a href="#pT.tableKeysT">pT.tableKeysT</a>&nbsp;(t)</td>
+	<td class="summary">Returns a pTable with a list of all the "lua-defined" keys in table t.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.tableLen">pT.tableLen</a>&nbsp;(t)</td>
-	<td class="summary">Returns the number of real table entries in pTable t - does not include any nil-assigned array elements </td>
+	<td class="summary">Returns the number of real table entries of t - does not include any nil-assigned array elements.</td>
 	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#pT.unpack">pT.unpack</a>&nbsp;(t, b, e)</td>
-	<td class="summary">Unpacks and returns the array-component of pTable t as a list of values (table.unpack() replacement).</td>
+	<td class="summary">For the range of array-index b till e of pTable t, returns an list of element values - "pTable-aware" table.unpack() replacement.</td>
 	</tr>
 
 	<tr>
-	<td class="name" nowrap><a href="#pT.unregisterPTable">pT.unregisterPTable</a>&nbsp;(t)</td>
+	<td class="name" nowrap><a href="#pT.unregPTable">pT.unregPTable</a>&nbsp;(t)</td>
 	<td class="summary">Unregisters an existing pTable t such that the pTable-functions won't work with this table anymore.</td>
 	</tr>
 
@@ -272,7 +277,37 @@
 
 <dt><a name="pT.arrayPairs"></a><strong>pT.arrayPairs</strong>&nbsp;(t, i)</dt>
 <dd>
-ipairs-replacement for pTable's array-component that iterates from t[1] till t[len(t)] and will return possible nil-values.
+ipairs-replacement for pTable t's array-component that iterates up from t[1] till t[len(t)], and will return possible nil-values.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t: pTable
+	</li>
+	
+	<li>
+	  i: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.arrayPairsSkipNil"></a><strong>pT.arrayPairsSkipNil</strong>&nbsp;(t, i)</dt>
+<dd>
+ipairs-replacement for pTable t's array-component that iterates up from t[1] till t[len(t)], and will skip any nil-values.
 
 
 <h3>Parameters</h3>
@@ -300,9 +335,71 @@ ipairs-replacement for pTable's array-component that iterates from t[1] till t[l
 
 
 
+<dt><a name="pT.deepCompare"></a><strong>pT.deepCompare</strong>&nbsp;(t1, t2)</dt>
+<dd>
+Returns result from a deep-compare of object t1 and t2 - compare by value for table elements - iterates down the trees - circular and repeated reference detection.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t1: any kind of object.
+	</li>
+	
+	<li>
+	  t2: any kind of object to deep-compare with t1.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+boolean result of deep-comparison.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.deepCopy"></a><strong>pT.deepCopy</strong>&nbsp;(t)</dt>
+<dd>
+Returns a deep copy of object t - iterates "down" the tree if t is a table - pTable-aware - multiple&circular reference aware - copy will share metatable with source.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  t: any kind of object.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+new deep-copied object
+
+
+
+</dd>
+
+
+
+
 <dt><a name="pT.get"></a><strong>pT.get</strong>&nbsp;(t, i)</dt>
 <dd>
-Returns the element value at index i of pTable t.
+Returns the array-element value at index i of pTable t.
 
 
 <h3>Parameters</h3>
@@ -333,9 +430,9 @@ value at t[i]
 
 
 
-<dt><a name="pT.getR"></a><strong>pT.getR</strong>&nbsp;(t, b, e)</dt>
+<dt><a name="pT.getRL"></a><strong>pT.getRL</strong>&nbsp;(t, b, e)</dt>
 <dd>
-For the range of index b till e of pTable t, returns the list of element values. Range must not extend array boundaries. (nil friendly)
+For the range of array-index b till e of pTable t, returns the list of element values. Range must not extend array boundaries. (nil friendly)
 
 
 <h3>Parameters</h3>
@@ -372,7 +469,7 @@ list of zero, one or more values (including possible nils)
 
 <dt><a name="pT.getRT"></a><strong>pT.getRT</strong>&nbsp;(t, b, e)</dt>
 <dd>
-For the range of index b till e of pTable t, returns an array of element values as a new pTable. Range must not extend array boundaries. (nil friendly)
+For the range of array-index b till e of pTable t, returns an array of element values as a new pTable. Range must not extend array boundaries. (nil friendly)
 
 
 <h3>Parameters</h3>
@@ -409,7 +506,7 @@ new pTable with requested values in the array-components.
 
 <dt><a name="pT.insert"></a><strong>pT.insert</strong>&nbsp;(t, iOrV, ...)</dt>
 <dd>
-Extends and inserts a single value at index i of pTable t. Array-size is increased to accomodate the list of values. Existing elements are moved-up - no values are overwritten. i can be len(t)+1, which implies appending to array. (nil-friendly)
+Extends and inserts a single value at index i of pTable t - Array-size is increased by one to accomodate the new entry. Existing elements are moved-up - no values are overwritten. i can be len(t)+1, which implies appending to array. (nil-friendly)
 
 
 <h3>Parameters</h3>
@@ -459,7 +556,7 @@ modified pTable t
 
 <dt><a name="pT.insertL"></a><strong>pT.insertL</strong>&nbsp;(t, i, ...)</dt>
 <dd>
-Inserts a list of values at index i of pTable t. Array-size is increased to accomodate the list of values. Existing elements are moved-up - no values are overwritten. (nil-friendly)
+Inserts a list of values at index i of pTable t - Array-size is increased to accomodate the list of values. Existing elements are moved-up - no values are overwritten. (nil-friendly)
 
 
 <h3>Parameters</h3>
@@ -511,7 +608,7 @@ Inserts the array-elements of a list of pTable's at index i of pTable t. Array-s
 	</li>
 	
 	<li>
-	  ...: list of pTable's (source) - may include nils, which are ignored.
+	  ...: list of zero, one or more pTables (source) - may include nils, which are ignored.
 	</li>
 	
 </ul>
@@ -530,18 +627,18 @@ Inserts the array-elements of a list of pTable's at index i of pTable t. Array-s
 
 <dt><a name="pT.isIndex"></a><strong>pT.isIndex</strong>&nbsp;(t, k)</dt>
 <dd>
-Returns whether the key k is a valid index for the array-component of table t
+Returns whether the key k is a valid index for the array-component of pTable t.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: table instance
+	  t: pTable
 	</li>
 	
 	<li>
-	  k: a possible array index value
+	  k: possible array index value
 	</li>
 	
 </ul>
@@ -552,40 +649,7 @@ Returns whether the key k is a valid index for the array-component of table t
 
 
 <h3>Return value:</h3>
-boolean - true indicates k is integer and 1 <= k <= len(t)
-
-
-
-</dd>
-
-
-
-
-<dt><a name="pT.isIndexPlus1"></a><strong>pT.isIndexPlus1</strong>&nbsp;(t, k)</dt>
-<dd>
-Returns whether the key k is a valid index for the array-component of table t including len(t) + 1, which is used by insert() to append to the array.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: table instance
-	</li>
-	
-	<li>
-	  k: a possible array index value including len(t)+1
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-boolean - true indicates k is integer and 1 <= k <= len(t)+1
+boolean - true indicates k is integer and 1 <= k <= pT.len(t)
 
 
 
@@ -596,14 +660,14 @@ boolean - true indicates k is integer and 1 <= k <= len(t)+1
 
 <dt><a name="pT.isLuaTableLenOK"></a><strong>pT.isLuaTableLenOK</strong>&nbsp;(lt)</dt>
 <dd>
-Returns whether the Lua table lt's length may be ambiguous by comparing lt's non-nil array size (nonNilLen(t)) with #lt. This could be a determination whether the #t is the length to use for an unknown table.
+Returns whether the Lua table lt's length may be ambiguous by comparing lt's non-nil array size (nonNilLen(t)) with #lt. This could help determine whether the #t is the length to use for an unknown table.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  lt: A "standard" lua-table
+	  lt: "standard" lua-table
 	</li>
 	
 </ul>
@@ -614,7 +678,7 @@ Returns whether the Lua table lt's length may be ambiguous by comparing lt's non
 
 
 <h3>Return value:</h3>
-Boolean: true if non-nil length equals #
+Boolean: true if lt's non-nil length equals #lt
 
 
 
@@ -625,14 +689,14 @@ Boolean: true if non-nil length equals #
 
 <dt><a name="pT.isPTable"></a><strong>pT.isPTable</strong>&nbsp;(t)</dt>
 <dd>
-Returns whether the t has registered as a pTable. (only tests whether len(t) has ever been set - no guarantees about "integrity")
+Returns whether the t is registered as a pTable.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: Lua table
+	  t: possible pTable
 	</li>
 	
 </ul>
@@ -643,40 +707,7 @@ Returns whether the t has registered as a pTable. (only tests whether len(t) has
 
 
 <h3>Return value:</h3>
-boolean - true indicates t has registered as a pTable
-
-
-
-</dd>
-
-
-
-
-<dt><a name="pT.keyExists"></a><strong>pT.keyExists</strong>&nbsp;(t, k)</dt>
-<dd>
-Returns whether a key k exists in table t. A key k exists when: * it has a normal map entry where a non-nil value is returned for t[k] * it has been registered as a "permanent key"  - may have nil value * key is valid array index: k is integer and 0 < k <= len(t)
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: table
-	</li>
-	
-	<li>
-	  k: key (not-nil)
-	</li>
-	
-</ul>
-
-
-
-
-
-
-<h3>Return value:</h3>
-Boolean indicating whether k is an existing key for table t
+boolean - true indicates t has been registered as a pTable
 
 
 
@@ -687,7 +718,7 @@ Boolean indicating whether k is an existing key for table t
 
 <dt><a name="pT.len"></a><strong>pT.len</strong>&nbsp;(t)</dt>
 <dd>
-Returns the registered length/size of the array component of pTable t
+Returns length/size of the array component of pTable t.
 
 
 <h3>Parameters</h3>
@@ -716,14 +747,14 @@ Integer >= 0 indicating the size/length of t's array-component
 
 <dt><a name="pT.lenT"></a><strong>pT.lenT</strong>&nbsp;(...)</dt>
 <dd>
-Returns the total number of elements of the list of pTables.
+Returns the sum of the array-lengths of a list of pTables: len(t1)+...+len(tn).
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  ...: list of pTable's - may include nils, which are ignored.
+	  ...: list of zero, one or more pTables - may include nils, which are ignored.
 	</li>
 	
 </ul>
@@ -741,6 +772,35 @@ Returns the total number of elements of the list of pTables.
 
 
 <dt><a name="pT.listPairs"></a><strong>pT.listPairs</strong>&nbsp;(...)</dt>
+<dd>
+ipairs-like iterator for varargs (friendly to nils).
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  ...: vararg list (may include nils)
+	</li>
+	
+</ul>
+
+
+
+
+<h3>Usage:</h3>
+function f(...) for i,a in listPairs(...) do print(i, a) end end
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="pT.listPairsSkipNil"></a><strong>pT.listPairsSkipNil</strong>&nbsp;(...)</dt>
 <dd>
 Iterator for varargs (friendly to nils).
 
@@ -771,14 +831,14 @@ function f(...) for i,a in apairs(...) do print(i, a) end end
 
 <dt><a name="pT.mapKeys"></a><strong>pT.mapKeys</strong>&nbsp;(t)</dt>
 <dd>
-Returns a list of all the keys of the map-component of table t
+Returns a list of all the keys of the map-component of pTable t without the array-indices.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: 
+	  t: pTable.
 	</li>
 	
 </ul>
@@ -787,6 +847,9 @@ Returns a list of all the keys of the map-component of table t
 
 
 
+
+<h3>Return value:</h3>
+list of t's map-keys.
 
 
 
@@ -795,16 +858,16 @@ Returns a list of all the keys of the map-component of table t
 
 
 
-<dt><a name="pT.mapKeysTable"></a><strong>pT.mapKeysTable</strong>&nbsp;(t)</dt>
+<dt><a name="pT.mapKeysT"></a><strong>pT.mapKeysT</strong>&nbsp;(t)</dt>
 <dd>
-Returns a table with a list of all the keys of the map-component of table t
+Returns a pTable with a list of all the keys of the map-component of pTable t without the array-indices.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: 
+	  t: pTable.
 	</li>
 	
 </ul>
@@ -813,6 +876,9 @@ Returns a table with a list of all the keys of the map-component of table t
 
 
 
+
+<h3>Return value:</h3>
+new pTable t's map-keys collected in the array-component.
 
 
 
@@ -841,7 +907,7 @@ Returns the number of map entries in pTable t that are not part of the array-com
 
 
 <h3>Return value:</h3>
-Integer >= 0 indicating number of t's non-array-component
+Integer >= 0 indicating number of t's non-array components
 
 
 
@@ -852,7 +918,7 @@ Integer >= 0 indicating number of t's non-array-component
 
 <dt><a name="pT.mapNext"></a><strong>pT.mapNext</strong>&nbsp;(t, k)</dt>
 <dd>
-Pairs-like iterator that excludes any k that are array indices - Only iterates over the map-component of the pTable.
+Next-like iterator that excludes any keys k of pTable t that are array indices - Only iterates over the map-component of the pTable.
 
 
 <h3>Parameters</h3>
@@ -882,7 +948,7 @@ Pairs-like iterator that excludes any k that are array indices - Only iterates o
 
 <dt><a name="pT.mapPairs"></a><strong>pT.mapPairs</strong>&nbsp;(t)</dt>
 <dd>
-Pairs-like iterator that excludes any k that are array indices - only iterates over the map-component of the pTable.
+Pairs-like iterator that excludes any keys k of pTable t that are array indices - only iterates over the map-component of the pTable.
 
 
 <h3>Parameters</h3>
@@ -937,14 +1003,14 @@ size of non-nil array (integer >= 0)
 
 <dt><a name="pT.pack"></a><strong>pT.pack</strong>&nbsp;(...)</dt>
 <dd>
-pTable constructor (table.pack() replacement), which copies the list arguments into the array-component of the newly created pTable. Registers the "correct" argument list size for the array-length. (nil-friendly) Uses the "convention" of adding an entry: n = select('#', ...). (however, the latter is NOT used by any pTable-function - just trying to play nice...)
+pTable constructor (table.pack() replacement), which copies the list arguments into the array-component of the newly created pTable. Registers the "correct" argument list size for the array-length. (nil-friendly)
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  ...: List of elements to add to the array-component of the newly created table
+	  ...: List of elements to add to the array-component of the newly created pTable
 	</li>
 	
 </ul>
@@ -955,7 +1021,7 @@ pTable constructor (table.pack() replacement), which copies the list arguments i
 
 
 <h3>Return value:</h3>
-Newly created pTable instance
+New pTable
 
 
 
@@ -966,7 +1032,7 @@ Newly created pTable instance
 
 <dt><a name="pT.packT"></a><strong>pT.packT</strong>&nbsp;(...)</dt>
 <dd>
-pTable constructor, which copies all the elements of the argument-list of pTable's into the array-component of a newly created pTable. Note that all map-entries of the source-pTable's are ignored. (nil-friendly)
+pTable constructor, which copies all the elements of the argument-list of pTable's into the array-component of a newly created pTable - essentially copies and concatenates the pTable-arrays into a new pTable. Note that all map-entries of the source-pTable's are ignored. (nil-friendly)
 
 
 <h3>Parameters</h3>
@@ -995,14 +1061,14 @@ Newly created pTable instance
 
 <dt><a name="pT.rarrayPairs"></a><strong>pT.rarrayPairs</strong>&nbsp;(t, i)</dt>
 <dd>
-reverse ipairs-replacement that handles nil values for an pTable's array-component and iterates down from t[len(t)] till t[1].
+reverse ipairs-replacement for pTable t's array-component and iterates down from t[len(t)] till t[1], and will return possible nil-values - safe(r) element removal.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: 
+	  t: pTable
 	</li>
 	
 	<li>
@@ -1023,9 +1089,9 @@ reverse ipairs-replacement that handles nil values for an pTable's array-compone
 
 
 
-<dt><a name="pT.registerPTable"></a><strong>pT.registerPTable</strong>&nbsp;(lt, n)</dt>
+<dt><a name="pT.regPTable"></a><strong>pT.regPTable</strong>&nbsp;(lt, n)</dt>
 <dd>
-Registers an existing standard Lua table lt as a pTable while providing the length/size n to use. Length/size for table lt has to be passed explicitly as no assumptions about #lt are implicitly trusted/used. (you could use #lt for the argument n value... if you know what you're doing)
+Registers an existing standard Lua table lt as a pTable while explicitly providing its length/size n. Length/size for table lt has to be passed explicitly as no assumptions about #lt are implicitly trusted/used. (you could use #lt for the argument n value... if you know what you're doing)
 
 
 <h3>Parameters</h3>
@@ -1058,7 +1124,7 @@ pTable lt (unmodified but registered with size n)
 
 <dt><a name="pT.remove"></a><strong>pT.remove</strong>&nbsp;(t, i)</dt>
 <dd>
-Removes element from pTable t at index i, returns the removed element's value, and decreases t's array size by one. (nil-friendly)
+Removes array-element from pTable t at index i, and returns the removed element's value - t's array size is decreased by one. (nil-friendly)
 
 
 <h3>Parameters</h3>
@@ -1069,7 +1135,7 @@ Removes element from pTable t at index i, returns the removed element's value, a
 	</li>
 	
 	<li>
-	  i: Starting index for removal - default is last element.
+	  i: index of element to remove - default is last element.
 	</li>
 	
 </ul>
@@ -1118,9 +1184,9 @@ Removes all the elements with nil-values from the array-component of pTable t.
 
 
 
-<dt><a name="pT.removeR"></a><strong>pT.removeR</strong>&nbsp;(t, b, e)</dt>
+<dt><a name="pT.removeRL"></a><strong>pT.removeRL</strong>&nbsp;(t, b, e)</dt>
 <dd>
-Removes n elements from pTable t starting with index i, returns those removed element values as a list, and decreases t's array size accordingly. (nil-friendly)
+Removes the range of array-elements from index b till e from pTable t, and returns those removed elements as a list - t's array size is decreased accordingly. (nil-friendly)
 
 
 <h3>Parameters</h3>
@@ -1157,7 +1223,7 @@ List of removed element value(s).
 
 <dt><a name="pT.removeRT"></a><strong>pT.removeRT</strong>&nbsp;(t, b, e)</dt>
 <dd>
-Removes n elements from pTable t starting with index i, returns those removed element values as a new pTable, and decreases t's array size accordingly. (nil-friendly)
+Removes the range of array-elements from index b till e from pTable t, and returns those removed elements in a new pTable - t's array size is decreased accordingly. (nil-friendly)
 
 
 <h3>Parameters</h3>
@@ -1205,7 +1271,7 @@ Set pTable t's element at index i to value v. i should be a valid index for t.
 	</li>
 	
 	<li>
-	  i: element's index
+	  i: index: 1 <= i <= len(t)
 	</li>
 	
 	<li>
@@ -1266,52 +1332,6 @@ modified pTable t
 
 
 
-<dt><a name="pT.setLen"></a><strong>pT.setLen</strong>&nbsp;(t, n, resetValues)</dt>
-<dd>
-Set the length/size of the array component of table t and registers t as a pTable. Thru pT.setLen(), a Lua-table t is "registered" as a pTable. If size is increased, then existing map entries become part of the array. If size is decreased, then some array components become map entries. If resetValues==true then all new array/map elements get reset to nil. This reset is to avoid any inconsistencies caused by unexpected new map/array elements. Note, however, that no element values are reset during the very first registration - implicit resetValues=false for first registration.
-
-
-<h3>Parameters</h3>
-<ul>
-	
-	<li>
-	  t: An standard lua-table or pTable
-	</li>
-	
-	<li>
-	  n: Integer >= 0
-	</li>
-	
-	<li>
-	  resetValues: boolean (default true) - resets new array or map elements to nil.
-	</li>
-	
-</ul>
-
-
-
-
-<h3>Usage</h3>
-<ul>
-	
-	<li>local t = pT.setLen({a="a", b="b", 1,2,3,nil}, 4)
-	
-	<li>t = pT.setLen(t,5) ; pT.set(t,5,"five")
-	
-</ul>
-
-
-
-<h3>Return value:</h3>
-pTable t (possibly modified - depending on n and resetValues - not modified on first registration)
-
-
-
-</dd>
-
-
-
-
 <dt><a name="pT.setT"></a><strong>pT.setT</strong>&nbsp;(t, i, ...)</dt>
 <dd>
 Copies the array elements of pTables t1...tn into the array-component of pTable t starting at index i. t's array-size must be able to accomodate the new elements as it does not grow automatically.
@@ -1329,7 +1349,7 @@ Copies the array elements of pTables t1...tn into the array-component of pTable 
 	</li>
 	
 	<li>
-	  ...: list of pTable's (source) - may include nils, which are ignored.
+	  ...: list of zero, one or more pTable's (source) - may include nils, which are ignored.
 	</li>
 	
 </ul>
@@ -1348,14 +1368,14 @@ Copies the array elements of pTables t1...tn into the array-component of pTable 
 
 <dt><a name="pT.tableKeys"></a><strong>pT.tableKeys</strong>&nbsp;(t)</dt>
 <dd>
-Returns a list of all the "lua-defined" keys in table t
+Returns a list of all the "lua-defined" keys in table t.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: 
+	  t: lua-table or pTable.
 	</li>
 	
 </ul>
@@ -1364,6 +1384,9 @@ Returns a list of all the "lua-defined" keys in table t
 
 
 
+
+<h3>Return value:</h3>
+list of t's keys .
 
 
 
@@ -1372,16 +1395,16 @@ Returns a list of all the "lua-defined" keys in table t
 
 
 
-<dt><a name="pT.tableKeysTable"></a><strong>pT.tableKeysTable</strong>&nbsp;(t)</dt>
+<dt><a name="pT.tableKeysT"></a><strong>pT.tableKeysT</strong>&nbsp;(t)</dt>
 <dd>
-Returns a table with a list of all the "lua-defined" keys in table t
+Returns a pTable with a list of all the "lua-defined" keys in table t.
 
 
 <h3>Parameters</h3>
 <ul>
 	
 	<li>
-	  t: 
+	  t: lua-table or pTable.
 	</li>
 	
 </ul>
@@ -1390,6 +1413,9 @@ Returns a table with a list of all the "lua-defined" keys in table t
 
 
 
+
+<h3>Return value:</h3>
+new pTable t's keys collected in the array-component.
 
 
 
@@ -1400,7 +1426,7 @@ Returns a table with a list of all the "lua-defined" keys in table t
 
 <dt><a name="pT.tableLen"></a><strong>pT.tableLen</strong>&nbsp;(t)</dt>
 <dd>
-Returns the number of real table entries in pTable t - does not include any nil-assigned array elements
+Returns the number of real table entries of t - does not include any nil-assigned array elements. Simply loops with pairs() over all table entries and counts.
 
 
 <h3>Parameters</h3>
@@ -1429,7 +1455,7 @@ Integer >= 0 indicating number of truly allocated table entries
 
 <dt><a name="pT.unpack"></a><strong>pT.unpack</strong>&nbsp;(t, b, e)</dt>
 <dd>
-Unpacks and returns the array-component of pTable t as a list of values (table.unpack() replacement). pT.unpack does NOT use any "t.n" that may be used to indicates the array-length.
+For the range of array-index b till e of pTable t, returns an list of element values - "pTable-aware" table.unpack() replacement. Note that pT.unpack does NOT use any "t.n" that may be used to indicates the array-length.
 
 
 <h3>Parameters</h3>
@@ -1464,9 +1490,9 @@ list of values representing t[b:e] - may include nils
 
 
 
-<dt><a name="pT.unregisterPTable"></a><strong>pT.unregisterPTable</strong>&nbsp;(t)</dt>
+<dt><a name="pT.unregPTable"></a><strong>pT.unregPTable</strong>&nbsp;(t)</dt>
 <dd>
-Unregisters an existing pTable t such that the pTable-functions won't work with this table anymore. When other functions will change this table's size, thru unregisterPTable() you can prevent accidental use of the pTable functions with the wrong size. It will force the need to re-register the table with the proper size.
+Unregisters an existing pTable t such that the pTable-functions won't work with this table anymore. When other functions will change this table's size, thru unregPTable() you can prevent accidental use of the pTable functions with the wrong size. It will force the need to re-register the table with the proper size.
 
 
 <h3>Parameters</h3>
