@@ -1,4 +1,6 @@
-local pT = require("prudentTable")
+
+local pT,pT_i = require("prudentTable")
+local pT_i = pT.pT_i
 
 pp = function(t)
 	local s = ""
@@ -26,10 +28,10 @@ pp(t)
 t = {"one","two","three"}
 --print(#t)
 --pp(t)
-t = pT.regPTable(t,3)
+t = pT.pTableT(t,3)
 pp(t)
 
-t = pT.regPTable({a="a", b="b", 1,2,3,nil,c="c"}, 4)
+t = pT.pTableT({a="a", b="b", 1,2,3,nil,c="c"}, 4)
 print("t:",t.a,t.b,t.c,#t,pT.len(t))
 pp(t)
 
@@ -37,7 +39,7 @@ t2 = pT.pack("one","two","three")
 pp(t2)
 t2 = pT.pack(nil,"two",nil)
 pp(t2)
-pT.regPTable(t2,7)
+pT.pTableT(t2,7)
 pp(t2)
 print("pT.isIndex(t,0)",pT.isIndex(t,0))
 print("pT.isIndex(t,1)",pT.isIndex(t,1))
@@ -97,10 +99,10 @@ print("unpack",pT.unpack(pT.pack(1,2),1,2))
 local t3 = pT.pack(1,2,3)
 
 print("keys")
-print(pT.tableKeys(t3))
-print(pT.mapKeys(t3))
+print(pT.tableKeysL(t3))
+print(pT.mapKeysL(t3))
 t3.n=nil
-print(pT.mapKeys(t3))
+print(pT.mapKeysL(t3))
 
 local s = "{"
 for k,v in pairs(table) do
@@ -126,8 +128,8 @@ print("removeNils")
 pp(t10)
 pp(pT.removeNils(t10))
 
-print("pT.regPTable")
-pp(pT.regPTable({a="a", b="b", 1,2,3,nil}, 4))
+print("pT.pTableT")
+pp(pT.pTableT({a="a", b="b", 1,2,3,nil}, 4))
 
 print("setn/getn")
 t22 = {1,2,3,4}
@@ -160,7 +162,7 @@ print (#a,#b)
 --6       3
 
 print("mapPairs")
-m1 = pT.regPTable({1,2,3,a="A",b="B",4},4)
+m1 = pT.pTableT({1,2,3,a="A",b="B",4},4)
 pp(m1)
 for k,v in pT.mapPairs(m1) do print("k,v",k,v) end
 
@@ -188,5 +190,36 @@ print("dC:",pT.deepCompare({2,{["a"]=4,d1}},{2,{["a"]=4,d2}}))
 print("dC:",pT.deepCompare(d1,d2))
 for k,v in pairs(d1) do print("kv:",k,v) end
 print("dC1:",pT.deepCompare({},{}))
+
+print("pT.shallowCompare")
+s1 = {}
+s10={1};s20={1};
+s10.ref=s10;s10[s10]="ja";s10[s10]=s10
+s20.ref=s20;s20[s20]="ja";s20[s20]=s20
+print("sC:",pT.shallowCompare({1,s1},{1,s1}))
+print("sC:",pT.shallowCompare(s10,s20))
+
+print("pT.arrayCopy")
+ac1=pT.pack(1,2,3,4,5,6,nil,8,nil)
+print(ac1)
+ac1["a"]="A";pT.insert(ac1,ac1)
+pp(ac1)
+ac2=pT.arrayCopy(ac1)
+print(ac2)
+pp(ac2)
+
+
+print("pT_i.assignGlobalsLocalsFunctionMap")
+print("\npT_i.assignGlobalsLocalsFunctionMap(pT)")
+local g,l,lt = pT_i.assignGlobalsLocalsFunctionMap(pT, "pT.")
+print(g,"\n")
+print(l,"\n")
+print(lt,"\n")
+print("\npT_i.assignGlobalsLocalsFunctionMap(pT_i)")
+local g,l,lt = pT_i.assignGlobalsLocalsFunctionMap(pT_i, "pT_i.")
+print(g,"\n")
+print(l,"\n")
+print(lt,"\n")
+
 print("Einde")
 
