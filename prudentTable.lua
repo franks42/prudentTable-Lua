@@ -10,18 +10,25 @@
 --
 --]]
 -------------------------------------------------------------------------------
+local json = require("cadkjson")
+jpp = json.pp
+jppdb = json.ppdb
 
+
+--- Prudent Table routines.
+-- @class module
+-- @name pTable
 -- make sure we keep the globals accessible thru "orig_*" aliases
-local orig_aget, orig_agetLL, orig_agetLT, orig_agetRL, orig_agetRT, orig_apairs, orig_arrayCopy, orig_arrayLengthKey, orig_arrayPairs, orig_arrayPairsSkipNil, orig_arrayValuesS, orig_aset, orig_asetL, orig_asetT, orig_deepCompare, orig_deepCopy, orig_getLen, orig_insert, orig_insertL, orig_insertT, orig_isIndex, orig_isLuaTableLenOK, orig_isMapKey, orig_isPTable, orig_len, orig_lenT, orig_listPairs, orig_listPairsSkipNil, orig_mapKeysL, orig_mapKeysT, orig_mapLen, orig_mapNext, orig_mapPairs, orig_mapValuesL, orig_mapValuesS, orig_mapValuesT, orig_nonNilLen, orig_pT_i, orig_pTableL, orig_pTableT, orig_pack, orig_packT, orig_rarrayPairs, orig_remove, orig_removeNils, orig_removeRL, orig_removeRT, orig_shallowCompare, orig_shallowCopy, orig_tableKeysL, orig_tableKeysT, orig_tableLen, orig_unpack, orig_unregPTable = aget, agetLL, agetLT, agetRL, agetRT, apairs, arrayCopy, arrayLengthKey, arrayPairs, arrayPairsSkipNil, arrayValuesS, aset, asetL, asetT, deepCompare, deepCopy, getLen, insert, insertL, insertT, isIndex, isLuaTableLenOK, isMapKey, isPTable, len, lenT, listPairs, listPairsSkipNil, mapKeysL, mapKeysT, mapLen, mapNext, mapPairs, mapValuesL, mapValuesS, mapValuesT, nonNilLen, pT_i, pTableL, pTableT, pack, packT, rarrayPairs, remove, removeNils, removeRL, removeRT, shallowCompare, shallowCopy, tableKeysL, tableKeysT, tableLen, unpack, unregPTable	
+local orig_aget, orig_agetLL, orig_agetLT, orig_agetRL, orig_agetRT, orig_apairs, orig_append, orig_appendL, orig_appendT, orig_areset, orig_aresetR, orig_arrayCopy, orig_arrayLengthKey, orig_arrayPairs, orig_arrayPairsSkipNil, orig_arrayValuesS, orig_aset, orig_asetL, orig_asetT, orig_concat, orig_deepCompare, orig_deepCopy, orig_exportPTable, orig_getLen, orig_hasNilValues, orig_importPTable, orig_insert, orig_insertL, orig_insertT, orig_isIndex, orig_isLuaLenOK, orig_isMapKey, orig_isPTable, orig_len, orig_lenEqLuaLen, orig_lenT, orig_listPairs, orig_listPairsSkipNil, orig_mapKeysL, orig_mapKeysT, orig_mapLen, orig_mapNext, orig_mapPairs, orig_mapValuesL, orig_mapValuesS, orig_mapValuesT, orig_nonNilLen, orig_pT_i, orig_pTable, orig_pTableT, orig_pack, orig_rarrayPairs, orig_remove, orig_removeNils, orig_removeRL, orig_removeRT, orig_shallowCompare, orig_shallowCopy, orig_sort, orig_tableKeysL, orig_tableKeysT, orig_tableLen, orig_unpack, orig_unregPTable = aget, agetLL, agetLT, agetRL, agetRT, apairs, append, appendL, appendT, areset, aresetR, arrayCopy, arrayLengthKey, arrayPairs, arrayPairsSkipNil, arrayValuesS, aset, asetL, asetT, concat, deepCompare, deepCopy, exportPTable, getLen, hasNilValues, importPTable, insert, insertL, insertT, isIndex, isLuaLenOK, isMapKey, isPTable, len, lenEqLuaLen, lenT, listPairs, listPairsSkipNil, mapKeysL, mapKeysT, mapLen, mapNext, mapPairs, mapValuesL, mapValuesS, mapValuesT, nonNilLen, pT_i, pTable, pTableT, pack, rarrayPairs, remove, removeNils, removeRL, removeRT, shallowCompare, shallowCopy, sort, tableKeysL, tableKeysT, tableLen, unpack, unregPTable	
 
 -- localize all the fnames
-local aget, agetLL, agetLT, agetRL, agetRT, apairs, arrayCopy, arrayLengthKey, arrayPairs, arrayPairsSkipNil, arrayValuesS, aset, asetL, asetT, deepCompare, deepCopy, getLen, insert, insertL, insertT, isIndex, isLuaTableLenOK, isMapKey, isPTable, len, lenT, listPairs, listPairsSkipNil, mapKeysL, mapKeysT, mapLen, mapNext, mapPairs, mapValuesL, mapValuesS, mapValuesT, nonNilLen, pT_i, pTableL, pTableT, pack, packT, rarrayPairs, remove, removeNils, removeRL, removeRT, shallowCompare, shallowCopy, tableKeysL, tableKeysT, tableLen, unpack, unregPTable	
+local aget, agetLL, agetLT, agetRL, agetRT, apairs, append, appendL, appendT, areset, aresetR, arrayCopy, arrayLengthKey, arrayPairs, arrayPairsSkipNil, arrayValuesS, aset, asetL, asetT, concat, deepCompare, deepCopy, exportPTable, getLen, hasNilValues, importPTable, insert, insertL, insertT, isIndex, isLuaLenOK, isMapKey, isPTable, len, lenEqLuaLen, lenT, listPairs, listPairsSkipNil, mapKeysL, mapKeysT, mapLen, mapNext, mapPairs, mapValuesL, mapValuesS, mapValuesT, nonNilLen, pT_i, pTable, pTableT, pack, rarrayPairs, remove, removeNils, removeRL, removeRT, shallowCompare, shallowCopy, sort, tableKeysL, tableKeysT, tableLen, unpack, unregPTable	
 
 -- make sure we keep the globals accessible thru "orig_*" aliases
-local orig_agetRT_i, orig_aget_i, orig_arrayPairsSkipNil_iter, orig_arrayPairs_iter, orig_asetT_i, orig_aset_i, orig_assignGlobalsLocalsFunctionMap, orig_deepCompare_helper, orig_deepCopy_helper, orig_isGE0Int, orig_isGT0Int, orig_isIndexPlus1, orig_listPairsSkipNil_iter, orig_listPairs_iter, orig_rarrayPairs_iter, orig_setLen = agetRT_i, aget_i, arrayPairsSkipNil_iter, arrayPairs_iter, asetT_i, aset_i, assignGlobalsLocalsFunctionMap, deepCompare_helper, deepCopy_helper, isGE0Int, isGT0Int, isIndexPlus1, listPairsSkipNil_iter, listPairs_iter, rarrayPairs_iter, setLen	
+local orig_agetRT_i, orig_aget_i, orig_aresetR_i, orig_arrayPairsSkipNil_iter, orig_arrayPairs_iter, orig_asetT_i, orig_aset_i, orig_assignGlobalsLocalsFunctionMap, orig_deepCompare_helper, orig_deepCopy_helper, orig_isGE0Int, orig_isGT0Int, orig_isIndexPlus1, orig_listPairsSkipNil_iter, orig_listPairs_iter, orig_rarrayPairs_iter, orig_setLen = agetRT_i, aget_i, aresetR_i, arrayPairsSkipNil_iter, arrayPairs_iter, asetT_i, aset_i, assignGlobalsLocalsFunctionMap, deepCompare_helper, deepCopy_helper, isGE0Int, isGT0Int, isIndexPlus1, listPairsSkipNil_iter, listPairs_iter, rarrayPairs_iter, setLen	
 
 -- localize all the fnames
-local agetRT_i, aget_i, arrayPairsSkipNil_iter, arrayPairs_iter, asetT_i, aset_i, assignGlobalsLocalsFunctionMap, deepCompare_helper, deepCopy_helper, isGE0Int, isGT0Int, isIndexPlus1, listPairsSkipNil_iter, listPairs_iter, rarrayPairs_iter, setLen	
+local agetRT_i, aget_i, aresetR_i, arrayPairsSkipNil_iter, arrayPairs_iter, asetT_i, aset_i, assignGlobalsLocalsFunctionMap, deepCompare_helper, deepCopy_helper, isGE0Int, isGT0Int, isIndexPlus1, listPairsSkipNil_iter, listPairs_iter, rarrayPairs_iter, setLen	
 
 local pT, pT_i
 
@@ -88,13 +95,19 @@ function pT.nonNilLen(lt)
 	return n - 1
 end
 
---- Returns whether the Lua table lt's length may be ambiguous by comparing lt's non-nil array size (nonNilLen(t)) with #lt. 
+--- Returns whether the Lua table lt's length may be non-ambiguous by comparing lt's non-nil array size (nonNilLen(t)) with #lt. 
 -- This could help determine whether the #t is the length to use for an unknown table.
 --@param lt "standard" lua-table
 --@return Boolean: true if lt's non-nil length equals #lt
-function pT.isLuaTableLenOK(lt)
+function pT.isLuaLenOK(lt)
 	return nonNilLen(lt) == #lt
 end
+
+--- Returns whether pTable's len(t) is equal to Lua's notion of array-size #t -
+-- if so, then some Lua-functions may have predictable result.
+--@param t pTable
+--@return Boolean: len(t)==#t
+function pT.lenEqLuaLen(t) return len(t) == #t end
 
 --- Returns length/size of the array component of pTable t.
 --@param t pTable
@@ -137,13 +150,23 @@ function pT.tableLen(t)
 	return n
 end
 
+--- Returns true when the array-component of pTable t includes any nil values.
+--@param t pTable
+--@return boolean indicating whether t includes array-elements with nil value.
+function pT.hasNilValues(t)
+	for i,v in arrayPairs(t) do if v==nil then return true end end
+	return false
+end
+
+-------------------------------------------------------------------------------
+
 -- Set the length/size of the array component of table t and registers t as a pTable.
 -- Thru setLen(), a Lua-table t is "registered" as a pTable.
 -- If size is increased, then existing map entries become part of the array.
 -- If size is decreased, then some array components become map entries.
--- If resetValues==true then all new array/map elements get reset to nil.
+-- If resetValues==true (default) then all new array/map elements get reset to nil.
 -- This reset is to avoid any inconsistencies caused by unexpected new map/array elements.
--- Note, however, that no element values are reset during the very first registration - implicit resetValues=false for first registration.
+-- Note, however, that no element values are reset by default during the very first registration - implicit resetValues=false for first registration.
 --@param t An standard lua-table or pTable
 --@param n Integer >= 0
 --@param resetValues boolean (default true) - resets new array or map elements to nil.
@@ -164,27 +187,8 @@ function pT_i.setLen(t, n, resetValues)
 	return t
 end
 
---- Registers an existing standard Lua table lt as a pTable while explicitly providing its length/size n.
--- Length/size for table lt has to be passed explicitly as no assumptions about #lt are implicitly trusted/used. (you could use #lt for the argument n value... if you know what you're doing)
---@param lt An standard lua-table - default is {}
---@param n Integer >= 0 - indicates the size of the array-component (default is 0)
---@return pTable lt (unmodified but registered with size n)
-function pT.pTableT(lt,n)
-	n = (type(lt)=="number" and lt) or n or 0
-	lt = (type(lt)=="table" and lt) or {}
-	return setLen(lt, n, false)
-end
-
---- Unregisters an existing pTable t such that the pTable-functions won't work with this table anymore. 
--- When other functions will change this table's size, thru unregPTable() you can prevent accidental use of the pTable functions with the wrong size. It will force the need to re-register the table with the proper size.
---@param t pTable
---@return t (unmodified but unregistered)
-function pT.unregPTable(t)
-	tableLenT[t] = nil
-	return t
-end
-
 -------------------------------------------------------------------------------
+-- array-get functions that incorporate array-bound checking
 -- aget, agetLT, agetLL, agetRT, agetRL
 
 --- Returns the array-element value at index i of pTable t.
@@ -205,7 +209,7 @@ function pT_i.aget_i(t,i)
 	return t[i]
 end
 
---- For a list of indices i,...,j, of the array-component of pTable t, return the associated values in the array-component of a pTable.
+--- For a list of indices i,...,j, of the array-component of pTable t, return the associated values in the array-component of a pTable (note that indices do not have to be in any order).
 --@param t pTable
 --@param ... list of one or more indices for pTable t's array-component
 --@return pTable where the array-component holds the values associated with the given list of indices
@@ -221,7 +225,7 @@ function pT.agetLT(t,...)
 	return tmp
 end
 
---- For a list of indices i,...,j, of the array-component of pTable t, return the associated values as a list.
+--- For a list of indices i,...,j, of the array-component of pTable t, return the associated values as a list (note that indices do not have to be in any order).
 --@param t pTable
 --@param ... list of one or more indices for pTable t's array-component
 --@return list of values associated with the given list of indices
@@ -253,8 +257,8 @@ end
 --@return new pTable with requested values in the array-components.
 function pT_i.agetRT_i(t,b,e)
 	local n = e-b+1
-	if n==1 then return pack(aget_i(t,b)) end
-	local tmp = setLen(pack(), n)
+	if n==1 then return pTable(aget_i(t,b)) end
+	local tmp = pTableT(n)
 	for j = 1,n do aset_i(tmp, j, aget_i(t,b+j-1)) end
 	return tmp
 end
@@ -267,10 +271,10 @@ end
 --@param e end of range - 1 <= e <= len(t) and e >= b - defaults to len(t)
 --@return list of zero, one or more values (including possible nils)
 function pT.agetRL(t,b,e)
+	if(len(t)==0)then return end
 	local tmp = agetRT(t,b,e)
 	-- Note that this is the "original" unpack and not the pT.unpack!!
-	return orig_unpack(tmp,1,e-b+1)
---	return unpack(tmp,1,e-b+1)
+	return orig_unpack(tmp,1,len(tmp))
 end
 
 -------------------------------------------------------------------------------
@@ -313,9 +317,9 @@ end
 
 -- Copies the array elements of pTables t1...tn into the array-component of pTable t starting at index i without any type or bound-checks.
 function pT_i.asetT_i(t,i,...)
-	for i,ti in listPairs(...) do
-		if ti ~= nil then
-			for j,vj in arrayPairs(ti) do
+	for k,tk in listPairs(...) do
+		if tk ~= nil then
+			for j,vj in arrayPairs(tk) do
 				aset_i(t,i,vj)
 				i = i + 1
 			end
@@ -331,7 +335,43 @@ end
 --@param ... list of zero, one or more values
 --@return modified pTable t
 function pT.asetL(t,i,...)
-	return asetT(t,i,pack(...))
+	return asetT(t,i,pTable(...))
+end
+
+--- Reset the range (b:e) of the array-component of pTable t to nil. Range must 
+--@param t pTable
+--@param b start of range - 1 <= b <= len(t) - defaults to 1
+--@param e end of range - 1 <= e <= len(t) and e >= b - defaults to len(t)
+--@return modified pTable t
+function pT.aresetR(t,b,e)
+	assert(isPTable(t), "Table is not a registered pTable")
+	e = e or len(t)
+	b = b or 1
+	assert(isIndex(t,b) and isIndex(t,e) and b<=e)
+	return pT_i.aresetR_i(t,b,e)
+end
+
+--- Reset the range (b:e) of the array-component of pTable t to nil. Range must 
+--@param t pTable
+--@param b start of range - 1 <= b <= len(t) - defaults to 1
+--@param e end of range - 1 <= e <= len(t) and e >= b - defaults to len(t)
+--@return modified pTable t
+function pT_i.aresetR_i(t,b,e)
+	for i = b,e do aset_i(t,i) end
+	return t
+end
+
+--- For the list of indices, reset the associated array-element values of pTable t to nil.
+--@param t pTable
+--@param ... list of one or more indices for pTable t's array-component
+--@return modified pTable t.
+function pT.areset(t,...)
+	assert(isPTable(t), "pT.areset: Table t is not a registered pTable")
+	for i,index in listPairSkipNil(...) do
+		assert(isIndex(t,index))
+		aset_i(t,index)
+	end
+	return t
 end
 
 -------------------------------------------------------------------------------
@@ -363,7 +403,7 @@ function pT.insert(t,iOrV,...)
 	i = i or lt+1
 	assert(isIndexPlus1(t,i))
 	setLen(t, lt+1)
-	if i < len(t) then t = asetT_i(t,i+1,agetRT(t,i,lt)) end -- move 1 up
+	if i < len(t) then t = asetT_i(t,i+1,agetRT_i(t,i,lt)) end -- move 1 up
 	aset_i(t,i,v)
 	return t
 end
@@ -386,7 +426,7 @@ function pT.insertT(t,i,...)
 	local oldLen = len(t)
 	setLen(t, oldLen+nts)     -- extend size
 	if(i < oldLen + 1) then 
-		t = asetT_i(t,i+nts, agetRT(t,i,oldLen)) -- move up
+		t = asetT_i(t,i+nts, agetRT_i(t,i,oldLen)) -- move up
 	end
 	t = asetT_i(t,i,...)           -- insert
 	return t
@@ -405,6 +445,13 @@ function pT.insertL(t,i,...)
 	return insertT(t,i,t1)
 end
 
+--- Append value v to pTable t - array-size is increased.
+function pT.append(t,v) return insert(t,v) end
+--- Append a list of values to pTable t - array-size is increased.
+function pT.appendL(t,...) return insertL(t,nil,...) end
+--- Append the array-elements of a list of pTables to pTable t - array-size is increased.
+function pT.appendT(t,...) return insertT(t,nil,...) end
+
 -------------------------------------------------------------------------------
 -- remove, removeRT, removeRL, 
 
@@ -421,7 +468,7 @@ function pT.remove(t,i)
 	i = i or lt
 	assert(isIndex(t,i))
 	local v = aget_i(t,i)
-	if i ~= lt then asetT_i(t, i, agetRT(t, i+1, lt)) end
+	if i ~= lt then asetT_i(t, i, agetRT_i(t, i+1, lt)) end
 	setLen(t,lt-1)
 	return v
 end
@@ -439,9 +486,9 @@ function pT.removeRT(t,b,e)
 	assert(isIndex(t,b) and isIndex(t,e) and b<=e)
 	local lt = len(t)
 	local n = e-b+1
-	local rvs = agetRT(t,b,e)  -- table with removed values
+	local rvs = agetRT_i(t,b,e)  -- table with removed values
 	if i+n-1 < lt then
-		asetT(t,b, agetRT(t,b+n,lt-b-n+1))
+		asetT(t,b, agetRT_i(t,b+n,lt-b-n+1))
 	end
 	setLen(t, lt-n)
 	return rvs
@@ -454,24 +501,43 @@ end
 --@param e Last index for removal (default is e=len(t)).
 --@return List of removed element value(s).
 function pT.removeRL(t,b,e)
-	--assert(isPTable(t), "Table is not a registered pTable")
-	return unpack(removeAsTable(t,b,e))
+	return unpack(removeRT(t,b,e))
 end
 
 -------------------------------------------------------------------------------
+-- Constructors, register/unregister pTables, import/export
 -- pack and unpack replacements that are pTable-aware
--- pack, unpack 
+-- pTable, pTableT, pack, unpack, unregPTable
+
+--- pTable constructor that copies the list arguments into the 
+-- array-component of a newly created pTable (identical to pT.pack()).
+-- Registers the list size for the array-length.
+-- (nil-friendly)
+--@param ... List of elements to add to the array-component of the newly created pTable
+--@return New pTable
+function pT.pTable(...)
+	return setLen({...}, select('#', ...), false)
+end
+
+--- pTable constructor that registers an existing standard Lua table lt as a pTable while explicitly passing its length/size n.
+-- Length/size for table lt has to be passed explicitly as no assumptions about #lt are implicitly trusted/used. (you could use #lt for the argument n value... if you know what you're doing)
+--@usage t = pT.pTableT({1,2,nil,4,nil,nil}, 6)  => pTable with array-size 6
+--@param lt An standard lua-table - default is {}
+--@param n Integer >= 0 - indicates the size of the array-component (default is 0)
+--@return pTable lt (unmodified but registered with size n)
+function pT.pTableT(lt,n)
+	n = (type(lt)=="number" and lt) or n or 0
+	lt = (type(lt)=="table" and lt) or {}
+	return setLen(lt, n, false)
+end
 
 --- pTable constructor (table.pack() replacement), which copies the list arguments into the 
--- array-component of the newly created pTable.
+-- array-component of a newly created pTable.
 -- Registers the "correct" argument list size for the array-length.
 -- (nil-friendly)
 --@param ... List of elements to add to the array-component of the newly created pTable
 --@return New pTable
-function pT.pack(...)
-	return setLen({...}, select('#', ...), false)
-end
-pT.pTableL = pT.pack
+function pT.pack(...) return pTable(...) end
 
 --- For the range of array-index b till e of pTable t, returns an list of element values - "pTable-aware" table.unpack() replacement.
 -- Note that pT.unpack does NOT use any "t.n" that may be used to indicates the array-length.
@@ -479,25 +545,37 @@ pT.pTableL = pT.pack
 --@param b start of range to copy - defaults to 1
 --@param e end of range to copy - defaults to pT.len(t)
 --@return list of values representing t[b:e] - may include nils
-function pT.unpack(t,b,e)
-	assert(isPTable(t), "Table is not a registered pTable")
-	if len(t)==0 then return end -- return "nothing"
-	e = e or len(t)
-	b = b or 1
-	assert(isIndex(t,b) and isIndex(t,e) and b <= e , "pT.unpack: range arguments not proper array-indices, or begin > end")
-	return agetRL(t,b,e) 
+function pT.unpack(t,b,e) return agetRL(t,b,e) end
+
+--- Unregisters an existing pTable t such that the pTable-functions won't work with this table anymore. 
+-- When other functions will change this table's size, thru unregPTable() you can prevent accidental use of the pTable functions with the wrong size. It will force the need to re-register the table with the proper size.
+--@param t pTable
+--@return t (unmodified but unregistered)
+function pT.unregPTable(t)
+	tableLenT[t] = nil
+	return t
 end
 
---- pTable constructor, which copies all the elements of the argument-list of pTable's 
--- into the array-component of a newly created pTable - essentially copies and concatenates the pTable-arrays into a new pTable.
--- Note that all map-entries of the source-pTable's are ignored.
--- (nil-friendly)
---@param ... List of pTables - may include nils, which are ignored.
---@return Newly created pTable instance
-function pT.packT(...)
-	local nts = lenT(...)
-	local t = setLen({},nts)
-	return asetT_i(t,...)
+--- pTable import constructor, which takes a lua-table with a standardized key that indicates the array-size/length.
+--@param lt An standard lua-table with 
+--@return pTable lt (length-key has been removed)
+function pT.importPTable(lt)
+	assert(type(lt)=="table")
+	local n = lt[pT.arrayLengthKey]
+	assert(n~=nil and isGE0Int(n), "pT.importPTable: provided array-size thru " .. pT.arrayLengthKey .. " is not integer >= 0")
+	lt = setLen(lt, n, false)
+	lt[pT.arrayLengthKey] = nil  -- remove import length key as it may become out-of-sync
+	return lt
+end
+
+--- pTable export function that adds a standardized length-key with the value of pT.len(t),  unregisters t as a pTable, and returns the resulting normal lua-table.
+--@param pTable 
+--@return Lua-table (pTable-unregistered with a length-key entry added)
+function pT.exportPTable(t)
+	assert(isPTable(t))
+	t[pT.arrayLengthKey] = len(t)
+	unregPTable(t)
+	return lt
 end
 
 -------------------------------------------------------------------------------
@@ -608,7 +686,7 @@ end
 --@param t lua-table or pTable.
 --@return new pTable t's keys collected in the array-component.
 function pT.tableKeysT(t)
-	local tmp = pack()
+	local tmp = pTable()
 	for k,v in pairs(t) do insert(tmp,k) end
 	return tmp
 end
@@ -631,7 +709,7 @@ end
 --@param t pTable.
 --@return new pTable t's map-keys collected in the array-component.
 function pT.mapKeysT(t)
-	local tmp = pack()
+	local tmp = pTable()
 	for k,v in pairs(t) do 
 		if not isIndex(t,k) then insert(tmp,k) end
 	end
@@ -649,7 +727,7 @@ end
 --@param t pTable.
 --@return new pTable t's map-values collected in the array-component.
 function pT.mapValuesT(t)
-	local tmp = pack()
+	local tmp = pTable()
 	for k,v in pairs(t) do 
 		if not isIndex(t,k) then insert(tmp,v) end
 	end
@@ -667,7 +745,7 @@ end
 --@param t pTable.
 --@return new pTable with a map-set of t's array-values.
 function pT.arrayValuesS(t)
-	local tmp = pack()
+	local tmp = pTable()
 	for i,v in arrayPairsSkipNil(t) do tmp[v] = true end
 	return tmp
 end
@@ -676,7 +754,7 @@ end
 --@param t pTable.
 --@return new pTable with a map-set of t's map-values.
 function pT.mapValuesS(t)
-	local tmp = pack()
+	local tmp = pTable()
 	for k,v in pairs(t) do if not isIndex(t,k) then tmp[v] = true end end
 	return tmp
 end
@@ -689,16 +767,40 @@ end
 function pT.removeNils(t)
 	assert(isPTable(t), "Table is not a registered pTable")
 	for i,v in rarrayPairs(t) do 
-		if v==nil then remove(t,i) end 
+		if v==nil then 
+			remove(t,i) 
+		end 
 	end
+	return t
+end
+
+--- String-concatenates all elements of the array-component of t from b till e and inserting the seperator sep between the elements (table.concat replacement). Nil-values are not allowed in the specified range.
+--@param t pTable
+--@param sep seperator/delimiter string - default is "" (empty string).
+--@param b start of range - 1 <= b <= len(t) - defaults to 1.
+--@param e end of range - 1 <= e <= len(t) and e >= b - defaults to len(t).
+--@return string - result from concatenation
+function pT.concat(t,sep,b,e)
+	b = b or 1
+	e = e or len(t)
+	assert(isIndex(b) and isIndex(e) and b <= e, "pT.concat: range invalid - isIndex(b) and isIndex(e) and b <= e")
+	return table.concat(t, sep, b, e)
+end
+
+--- Returns a sorted copy of the array-component of pTable t - pT.lenEqLuaLen(t) must yield true (quirky table.sort replacement).
+--@param t pTable
+--@param comp comparison function (optional).
+--@return sorted pTable t
+function pT.sort(t,comp)
+	assert(lenEqLuaLen(t),"pT.sort: lenEqLuaLen(t)==false - the sorting is only reliable if pTable's len(t) equals Lua's #t because the underlying table.sort function is used.")
+	table.sort(t,comp)
 	return t
 end
 
 -------------------------------------------------------------------------------
 -- shallowCopy, shallowCompare, deepCopy and deepCompare 
 -------------------------------------------------------------------------------
-
---- Returns a shallow copy of the array-component of pTable t - circular/self reference aware - copy will share metatable with source t - no map entries are copied.
+--- Returns a shallow copy of the array-component of pTable t - circular/self reference aware - copy will optionally share metatable with source t - no map entries are copied.
 --@param t pTable.
 --@param cpMT boolean to indicate whether metatable should be shared - default is false (no MT-sharing).
 --@return new pTable with shallow copy of array-component of t
@@ -707,11 +809,11 @@ function pT.arrayCopy(t, cpMT)
 	local res = pTableT(len(t))  -- result, i.e. the copied table
 	-- have to share the metatable before the element-copy because the index/newindex 
 	-- could have been modified (maybe proxy-table) - scary stuff...
-	if(cpMT==true)then res = setmetatable(res,getmetatable(t)) end
+	if(cpMT == true)then res = setmetatable(res,getmetatable(t)) end
 	-- register the result-table as a pTable if source-table is one
 	for i,v in arrayPairsSkipNil(t) do
-		if(type(v) == "table" and v==t)then res[i] = res
-		else res[i] = v end
+		if(type(v) == "table" and v==t)then aset_i(res,i,res)
+		else aset_i(res,i,v) end
 	end
 	return res
 end
@@ -725,7 +827,7 @@ function pT.shallowCopy(t, cpMT)
 	local res = {}  -- result, i.e. the copied table
 	-- have to share the metatable before the element-copy because the index/newindex 
 	-- could have been modified (maybe proxy-table) - scary stuff...
-	if(cpMT==true)then res = setmetatable(res,getmetatable(t)) end
+	if(cpMT == true)then res = setmetatable(res,getmetatable(t)) end
 	-- register the result-table as a pTable if source-table is one
 	if isPTable(t) then pTableT(res,len(t)) end
 	for k,v in pairs(t) do
@@ -734,7 +836,7 @@ function pT.shallowCopy(t, cpMT)
 		else kr = k end
 		if(type(v) ~= "table" and v==t)then vr = res
 		else vr = v end
-		res[kr] = vr -- final element assignment for result-table
+		res[kr] = vr  -- final element assignment for result-table
 	end
 	return res
 end
@@ -755,7 +857,7 @@ function pT.shallowCompare(t1, t2)
 		(tableLen(t1) ~= tableLen(t2)))then return false end
 	-- so, t1 and t2 are both tables with equal number of elements
 	-- and they could both be pTables with equal array-length
-	local vt2 = t2[t2]
+	local vt2 = t2[t2]  -- self-reference if not-nil
 	for k1,v1 in pairs(t1) do
 		local v12 = t2[k1]
 		if(v12~=nil)then
@@ -776,30 +878,30 @@ function pT.shallowCompare(t1, t2)
 	return true
 end
 
---- Returns a deep copy of object t - iterates "down" the tree if t is a table - pTable-aware - multiple&circular/self reference aware - copy will share metatable with source.
---@param t any kind of object.
+--- Returns a deep copy of object o - iterates "down" the tree if o is a table - pTable-aware - multiple&circular/self reference aware - copy will share metatable with source.
+--@param o any kind of object.
 --@param cpMT boolean to indicate whether metatable should be shared - default is false (no MT-sharing).
 --@return new deep-copied object
-function pT.deepCopy(t, cpMT)
-	local trefs = pack()
-	return deepCopy_helper(t, trefs, cpMT)
+function pT.deepCopy(o, cpMT)
+	local trefs = pTable() -- maintain self-references map
+	return deepCopy_helper(o, trefs, cpMT)
 end
 
 function pT_i.deepCopy_helper(t, trefs, cpMT)
 	-- non-tables are simply returned - by ref or by value depending on type 
 	if type(t) ~= "table" then return t end
-	-- maintain the table references with thier associated copied-table-refs
+	-- maintain the table references with their associated copied-table-refs
 	local res  -- result, i.e. the deep-copied table
 	if trefs[t] then
-		-- already copied this table before, so only copy the new-reference
+		-- already copied this table before, so only copy the previous reference
 		res = trefs[t] 
 	else
 		-- true copy is needed
 		res = {}
-		trefs[t] = res
+		trefs[t] = res  -- record the mapping for self/circular-reference detection
 		-- have to share the metatable before the element-copy because the index/newindex 
 		-- could have been modified (maybe proxy-table) - scary stuff...
-		if(cpMT==true)then res = setmetatable(res,getmetatable(t)) end
+		if(cpMT==true)then res = setmetatable(res, getmetatable(t)) end
 		-- register the result-table as a pTable if source-table is one
 		if isPTable(t) then pTableT(res,len(t)) end
 		for k,v in pairs(t) do
@@ -818,7 +920,7 @@ end
 --@param t2 any kind of object to deep-compare with t1.
 --@return boolean result of deep-comparison.
 function pT.deepCompare(t1, t2)
-	local trefs = pack()
+	local trefs = pTable()
 	return deepCompare_helper(t1, t2, trefs)
 end
 
@@ -829,7 +931,7 @@ function pT_i.deepCompare_helper(t1, t2, trefs)
 	-- see if we can go home early
 	if(t1==t2)then return true end
 	-- make sure that we notice circular or before seen comparisons
-	trefs[t1] = trefs[t1] or pack()
+	trefs[t1] = trefs[t1] or pTable()
 	if(trefs[t1][t2]==true)then return true  -- compared before
 	else trefs[t1][t2]=true end  -- register this comparison
 	-- pTable specific comparisons
@@ -874,7 +976,7 @@ end
 function pT_i.assignGlobalsLocalsFunctionMap(t, pre)
 	local function komma(i) if(i>1)then return ", " else return "" end end
 	local globals, locals, localfmap, gleft, gright, lleft, lright, ltleft, ltright
-	local fnames = pTableL()
+	local fnames = pTable()
 	-- collect all string-keys
 	for k,v in pairs(t) do if(type(k)=="string")then insert(fnames,nil,k) end end
 	table.sort(fnames)  -- we "know" that there are no nils in fnames
@@ -897,10 +999,10 @@ end
 -- local to function-map declarations
 
 -- map function-map names to locals
-aget, agetLL, agetLT, agetRL, agetRT, apairs, arrayCopy, arrayLengthKey, arrayPairs, arrayPairsSkipNil, arrayValuesS, aset, asetL, asetT, deepCompare, deepCopy, getLen, insert, insertL, insertT, isIndex, isLuaTableLenOK, isMapKey, isPTable, len, lenT, listPairs, listPairsSkipNil, mapKeysL, mapKeysT, mapLen, mapNext, mapPairs, mapValuesL, mapValuesS, mapValuesT, nonNilLen, pT_i, pTableL, pTableT, pack, packT, rarrayPairs, remove, removeNils, removeRL, removeRT, shallowCompare, shallowCopy, tableKeysL, tableKeysT, tableLen, unpack, unregPTable = pT.aget, pT.agetLL, pT.agetLT, pT.agetRL, pT.agetRT, pT.apairs, pT.arrayCopy, pT.arrayLengthKey, pT.arrayPairs, pT.arrayPairsSkipNil, pT.arrayValuesS, pT.aset, pT.asetL, pT.asetT, pT.deepCompare, pT.deepCopy, pT.getLen, pT.insert, pT.insertL, pT.insertT, pT.isIndex, pT.isLuaTableLenOK, pT.isMapKey, pT.isPTable, pT.len, pT.lenT, pT.listPairs, pT.listPairsSkipNil, pT.mapKeysL, pT.mapKeysT, pT.mapLen, pT.mapNext, pT.mapPairs, pT.mapValuesL, pT.mapValuesS, pT.mapValuesT, pT.nonNilLen, pT.pT_i, pT.pTableL, pT.pTableT, pT.pack, pT.packT, pT.rarrayPairs, pT.remove, pT.removeNils, pT.removeRL, pT.removeRT, pT.shallowCompare, pT.shallowCopy, pT.tableKeysL, pT.tableKeysT, pT.tableLen, pT.unpack, pT.unregPTable
+aget, agetLL, agetLT, agetRL, agetRT, apairs, append, appendL, appendT, areset, aresetR, arrayCopy, arrayLengthKey, arrayPairs, arrayPairsSkipNil, arrayValuesS, aset, asetL, asetT, concat, deepCompare, deepCopy, exportPTable, getLen, hasNilValues, importPTable, insert, insertL, insertT, isIndex, isLuaLenOK, isMapKey, isPTable, len, lenEqLuaLen, lenT, listPairs, listPairsSkipNil, mapKeysL, mapKeysT, mapLen, mapNext, mapPairs, mapValuesL, mapValuesS, mapValuesT, nonNilLen, pT_i, pTable, pTableT, pack, rarrayPairs, remove, removeNils, removeRL, removeRT, shallowCompare, shallowCopy, sort, tableKeysL, tableKeysT, tableLen, unpack, unregPTable = pT.aget, pT.agetLL, pT.agetLT, pT.agetRL, pT.agetRT, pT.apairs, pT.append, pT.appendL, pT.appendT, pT.areset, pT.aresetR, pT.arrayCopy, pT.arrayLengthKey, pT.arrayPairs, pT.arrayPairsSkipNil, pT.arrayValuesS, pT.aset, pT.asetL, pT.asetT, pT.concat, pT.deepCompare, pT.deepCopy, pT.exportPTable, pT.getLen, pT.hasNilValues, pT.importPTable, pT.insert, pT.insertL, pT.insertT, pT.isIndex, pT.isLuaLenOK, pT.isMapKey, pT.isPTable, pT.len, pT.lenEqLuaLen, pT.lenT, pT.listPairs, pT.listPairsSkipNil, pT.mapKeysL, pT.mapKeysT, pT.mapLen, pT.mapNext, pT.mapPairs, pT.mapValuesL, pT.mapValuesS, pT.mapValuesT, pT.nonNilLen, pT.pT_i, pT.pTable, pT.pTableT, pT.pack, pT.rarrayPairs, pT.remove, pT.removeNils, pT.removeRL, pT.removeRT, pT.shallowCompare, pT.shallowCopy, pT.sort, pT.tableKeysL, pT.tableKeysT, pT.tableLen, pT.unpack, pT.unregPTable	
 
 -- map function-map names to locals
-agetRT_i, aget_i, arrayPairsSkipNil_iter, arrayPairs_iter, asetT_i, aset_i, assignGlobalsLocalsFunctionMap, deepCompare_helper, deepCopy_helper, isGE0Int, isGT0Int, isIndexPlus1, listPairsSkipNil_iter, listPairs_iter, rarrayPairs_iter, setLen = pT_i.agetRT_i, pT_i.aget_i, pT_i.arrayPairsSkipNil_iter, pT_i.arrayPairs_iter, pT_i.asetT_i, pT_i.aset_i, pT_i.assignGlobalsLocalsFunctionMap, pT_i.deepCompare_helper, pT_i.deepCopy_helper, pT_i.isGE0Int, pT_i.isGT0Int, pT_i.isIndexPlus1, pT_i.listPairsSkipNil_iter, pT_i.listPairs_iter, pT_i.rarrayPairs_iter, pT_i.setLen	
+agetRT_i, aget_i, aresetR_i, arrayPairsSkipNil_iter, arrayPairs_iter, asetT_i, aset_i, assignGlobalsLocalsFunctionMap, deepCompare_helper, deepCopy_helper, isGE0Int, isGT0Int, isIndexPlus1, listPairsSkipNil_iter, listPairs_iter, rarrayPairs_iter, setLen = pT_i.agetRT_i, pT_i.aget_i, pT_i.aresetR_i, pT_i.arrayPairsSkipNil_iter, pT_i.arrayPairs_iter, pT_i.asetT_i, pT_i.aset_i, pT_i.assignGlobalsLocalsFunctionMap, pT_i.deepCompare_helper, pT_i.deepCopy_helper, pT_i.isGE0Int, pT_i.isGT0Int, pT_i.isIndexPlus1, pT_i.listPairsSkipNil_iter, pT_i.listPairs_iter, pT_i.rarrayPairs_iter, pT_i.setLen	
 
 -------------------------------------------------------------------------------
 -- finally... return the main function-map

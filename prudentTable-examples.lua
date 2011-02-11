@@ -1,3 +1,6 @@
+local json = require("cadkjson")
+jpp = json.pp
+jppdb = json.ppdb
 
 local pT,pT_i = require("prudentTable")
 local pT_i = pT.pT_i
@@ -74,6 +77,8 @@ print("#{1,2,3,nil,nil,6,7,8}",#{1,2,3,nil,nil,6,7,8})
 print("#{1,2,3,nil,nil,nil,nil,8}",#{nil,nil,nil,4,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,8,nil,nil,nil,nil,nil,nil,nil,10})
 print("#{1,2,3,nil,5,nil,nil,8,nil}",#{1,2,3,nil,5,nil,nil,8,nil})
 
+print("table.maxn")
+print(table.maxn({1,2,3,[6]=6,[6.5]=6.5}))
 
 print("table.insert")
 local ti = {1,2,3,nil,5,nil,nil,8,nil}
@@ -220,6 +225,46 @@ local g,l,lt = pT_i.assignGlobalsLocalsFunctionMap(pT_i, "pT_i.")
 print(g,"\n")
 print(l,"\n")
 print(lt,"\n")
+
+print("pT.hasNilValues")
+local hnv = pT.pTable(1,2,nil)
+jpp(pT.hasNilValues(hnv))
+jpp(pT.hasNilValues(pT.aset(hnv,3,3)))
+
+print("table.concat")
+print (table.concat(pT.pTable(1,2,3,"ja","nee",nil), ", "))
+print (table.concat(pT.removeNils(pT.pTable(1,2,nil,"ja","nee",nil)), ", ", 1, 4))
+print (table.concat(pT.pTable(1,2,nil,"ja","nee",nil), ", ", 1, 2))
+--print (pT.concat(pT.pTable(1,2,nil,"ja","nee",nil), ", ", 2, 4))
+
+print("table.sort")
+--local ts = pT.pTable(5,2,nil,4,1,nil)
+local ts = pT.pTable(5,2,4,1)
+jpp("table.sort:",ts)
+table.sort(ts)
+jpp("table.sort:",ts)
+--[[
+local ts = pT.removeNils(pT.pTable(5,2,nil,4,1,nil))
+jpp("table.sort:",ts)
+table.sort(ts)
+jpp("table.sort:",ts)
+jpp (pT.sort(pT.pTable(5,2,nil,4,1,3,nil)))
+--]]
+
+print("table.insert")
+local ti = {1,2,nil,nil,5,nil,7}
+table.insert(ti,8)
+jpp(ti)
+
+print("table.remove")
+local tr = {1,nil,nil, 4,nil,6}
+trv = table.remove(tr,6)
+jpp(trv,tr)
+
+print("table.maxn")
+t = {1,2,3,[3.1]="that's your maxn!!!"}
+print(table.maxn(t), t[table.maxn(t)])
+
 
 print("Einde")
 

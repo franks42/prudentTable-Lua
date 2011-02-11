@@ -92,6 +92,13 @@ In addition, we define an associated iterator mapPairs(t) to iterate only over t
 
 In other words, the number of defined entries in table t is not equal to the number of array-entries plus the number of map-entries, but all is still good...
 
+Lua enhancements that could help...
+-----------------------------------
+
+*  table.sort(): specify range of table-array that will be sorted. Currently it seems hard-coded to use (1:#t) for the range, and that #t makes the range unpredictable.
+*  table constructor {} that will tell you the actual number of array-elements assigned such that nil elements could be counted properly - similar to select("#",...) for a vararg-list.
+
+
 References
 ----------
 The following links show where some of the ideas came from. Thanks to the respective authors for their willingness to share.
