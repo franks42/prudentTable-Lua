@@ -1,76 +1,66 @@
 local json = require("cadkjson")
-jpp = json.pp
-jppdb = json.ppdb
+local jpp = json.pp
+local jppdb = json.ppdb
 
-local pT,pT_i = require("prudentTable")
+local pT = require("prudentTable")
 local pT_i = pT.pT_i
 
-pp = function(t)
-	local s = ""
-	s = "%"..pT.len(t).."%"..pT.mapLen(t).."%"..pT.tableLen(t).." {"
-	for i,v in pT.arrayPairs(t) do
-		if i ~= 1 then s = s ..", " end
-		if type(v)~="number" then 
-			if v == nil then v = tostring(v)
-			else v = "\""..tostring(v).."\"" end
-		end
-		s = s .. i.. ":" .. v ..""
-	end
-	s = s .. " }"
-	print(s)
-end
+local orig_aget,orig_agetR,orig_agetT,orig_apairs,orig_append,orig_appendT,orig_areset,orig_aresetR,orig_aresetT,orig_arrayCopy,orig_arrayLengthKey,orig_arrayPairs,orig_arrayPairsSkipNil,orig_arrayValuesS,orig_aset,orig_asetT,orig_compare,orig_concat,orig_copy,orig_deepCompare,orig_deepCopy,orig_exportPTable,orig_getLen,orig_hasNilValues,orig_importPTable,orig_insert,orig_insertT,orig_isIndex,orig_isMapKey,orig_isPTable,orig_len,orig_lenEqLuaLen,orig_lenT,orig_list,orig_listPairs,orig_listPairsSkipNil,orig_mapKeys,orig_mapLen,orig_mapNext,orig_mapPairs,orig_mapValues,orig_mapValuesS,orig_nonNilLen,orig_pT_i,orig_pTable,orig_pTableT,orig_pack,orig_rarrayPairs,orig_remove,orig_removeNils,orig_removeR,orig_sort,orig_tableKeys,orig_tableLen,orig_unpack,orig_unregPTable = aget,agetR,agetT,apairs,append,appendT,areset,aresetR,aresetT,arrayCopy,arrayLengthKey,arrayPairs,arrayPairsSkipNil,arrayValuesS,aset,asetT,compare,concat,copy,deepCompare,deepCopy,exportPTable,getLen,hasNilValues,importPTable,insert,insertT,isIndex,isMapKey,isPTable,len,lenEqLuaLen,lenT,list,listPairs,listPairsSkipNil,mapKeys,mapLen,mapNext,mapPairs,mapValues,mapValuesS,nonNilLen,pT_i,pTable,pTableT,pack,rarrayPairs,remove,removeNils,removeR,sort,tableKeys,tableLen,unpack,unregPTable	
 
+local aget,agetR,agetT,apairs,append,appendT,areset,aresetR,aresetT,arrayCopy,arrayLengthKey,arrayPairs,arrayPairsSkipNil,arrayValuesS,aset,asetT,compare,concat,copy,deepCompare,deepCopy,exportPTable,getLen,hasNilValues,importPTable,insert,insertT,isIndex,isMapKey,isPTable,len,lenEqLuaLen,lenT,list,listPairs,listPairsSkipNil,mapKeys,mapLen,mapNext,mapPairs,mapValues,mapValuesS,nonNilLen,pT_i,pTable,pTableT,pack,rarrayPairs,remove,removeNils,removeR,sort,tableKeys,tableLen,unpack,unregPTable = pT.aget,pT.agetR,pT.agetT,pT.apairs,pT.append,pT.appendT,pT.areset,pT.aresetR,pT.aresetT,pT.arrayCopy,pT.arrayLengthKey,pT.arrayPairs,pT.arrayPairsSkipNil,pT.arrayValuesS,pT.aset,pT.asetT,pT.compare,pT.concat,pT.copy,pT.deepCompare,pT.deepCopy,pT.exportPTable,pT.getLen,pT.hasNilValues,pT.importPTable,pT.insert,pT.insertT,pT.isIndex,pT.isMapKey,pT.isPTable,pT.len,pT.lenEqLuaLen,pT.lenT,pT.list,pT.listPairs,pT.listPairsSkipNil,pT.mapKeys,pT.mapLen,pT.mapNext,pT.mapPairs,pT.mapValues,pT.mapValuesS,pT.nonNilLen,pT.pT_i,pT.pTable,pT.pTableT,pT.pack,pT.rarrayPairs,pT.remove,pT.removeNils,pT.removeR,pT.sort,pT.tableKeys,pT.tableLen,pT.unpack,pT.unregPTable	
+
+local app = pT_i.arrayPP
 
 print "Hello"
 
 local t
 
-t = pT.pack()
-pp(t)
+t = pack()
+app(t)
 
 t = {"one","two","three"}
 --print(#t)
---pp(t)
-t = pT.pTableT(t,3)
-pp(t)
+--app(t)
+t = pTableT(t,3)
+app(t)
 
-t = pT.pTableT({a="a", b="b", 1,2,3,nil,c="c"}, 4)
-print("t:",t.a,t.b,t.c,#t,pT.len(t))
-pp(t)
+t = pTableT({a="a", b="b", 1,2,3,nil,c="c"}, 4)
+print("t:",t.a,t.b,t.c,#t,len(t))
+app(t)
 
-t2 = pT.pack("one","two","three")
-pp(t2)
-t2 = pT.pack(nil,"two",nil)
-pp(t2)
-pT.pTableT(t2,7)
-pp(t2)
-print("pT.isIndex(t,0)",pT.isIndex(t,0))
-print("pT.isIndex(t,1)",pT.isIndex(t,1))
-print("pT.isIndex(t,10)",pT.isIndex(t,10))
-print("pT.isIndex(t,1.4)",pT.isIndex(t,1.4))
-print("pT.isIndex(t,\"3\")",pT.isIndex(t,"3"))
-for i,v in pT.rarrayPairs(t2) do print(i,v) end
+t2 = pack("one","two","three")
+app(t2)
+t2 = pack(nil,"two",nil)
+app(t2)
+pTableT(t2,7)
+app(t2)
+print("isIndex(t,0)",isIndex(t,0))
+print("isIndex(t,1)",isIndex(t,1))
+print("isIndex(t,10)",isIndex(t,10))
+print("isIndex(t,1.4)",isIndex(t,1.4))
+print("isIndex(t,\"3\")",isIndex(t,"3"))
+for i,v in rarrayPairs(t2) do print(i,v) end
 
 print("insert")
-pp(t2)
-pT.insert(t2,"eight")
-pp(t2)
-pT.insert(t2,8,"seven")
-pp(t2)
-pT.insertL(t2,nil,"eight",nil,"ten")
-pp(t2)
-pT.insert(t2)
-pp(t2)
+app(t2)
+insert(t2,"eight")
+app(t2)
+insert(t2,8,"seven")
+app(t2)
+insertT(t2,nil,pTable("eight",nil,"ten"))
+app(t2)
+insert(t2)
+app(t2)
 
 print("remove")
-pp(t2)
-print("remove(t2,10)",pT.remove(t2,10))
-pp(t2)
---print("remove(t2,3,5)",pT.remove(t2,3,5))
-pp(pT.pack(pT.remove(t2,3,5)))
-pp(t2)
-print("remove(t2,1,pT.len(t2))",pT.remove(t2,1,pT.len(t2)))
-pp(t2)
+app(t2)
+print("remove(t2,10)",remove(t2,10))
+app(t2)
+--print("remove(t2,3,5)",remove(t2,3,5))
+app(pack(remove(t2,3,5)))
+app(t2)
+print("remove(t2,1,len(t2))",remove(t2,1,len(t2)))
+app(t2)
 
 print("#{1,2,3,nil,5,nil,nil,8}",#{1,2,3,nil,5,nil,nil,8})
 print("#{1,2,3,nil,nil,6,7,8}",#{1,2,3,nil,nil,6,7,8})
@@ -87,28 +77,32 @@ print(table.insert(ti,2,"a"))
 print(#ti,ti[1],ti[2],ti[3],ti[4],ti[5],ti[6],ti[7],ti[8],ti[9],ti[10])
 
 print("insert")
-pp(t2)
-pT.insertL(t2,1,"one")
-pp(t2)
-pT.insertL(t2,1,"before one")
-pp(t2)
-pT.insertL(t2,1,"-2-one", "-3-one")
-pp(t2)
-pT.insertL(t2,pT.len(t2),"before last")
-pp(t2)
-pT.insertL(t2,3,"-2 one", "-3 one")
-pp(t2)
-print(pcall(pT.insertL, t2,-3,"-2 one", "-3 one"))
+app(t2)
+insert(t2,1,"one")
+app(t2)
+insert(t2,1,"before one")
+app(t2)
+insertT(t2,1,pTable("-2-one", "-3-one"))
+app(t2)
+insert(t2,len(t2),"before last")
+app(t2)
+insertT(t2,3,pTable("-2 one", "-3 one"))
+app(t2)
+print(pcall(insertT, t2,-3,pTable("-2 one", "-3 one")))
 
-print("unpack",pT.unpack(pT.pack(1,2),1,2))
-local t3 = pT.pack(1,2,3)
+print("list",list(pack(1,2),1,2))
+print("unpack",orig_unpack({1,2},1,2))
+local t3 = pack(1,2,3)
 
 print("keys")
-print(pT.tableKeysL(t3))
-print(pT.mapKeysL(t3))
-t3.n=nil
-print(pT.mapKeysL(t3))
+app(t3)
+print(list(tableKeys(t3)))
+print(list(mapKeys(t3)))
+t3.n=3
+jpp(t3)
+print(list(mapKeys(t3)))
 
+print("table",concat(mapKeys(table),","))
 local s = "{"
 for k,v in pairs(table) do
 	s = s ..","..k.."="..k
@@ -117,24 +111,24 @@ s = s.."}"
 print(s)
 
 function ttt(...)
-	for i,a in pT.apairs(...) do 
+	for i,a in apairs(...) do 
 		print(i,a)
 	end
 end
 ttt(10,nil,30,nil)
 
 function ll(...)  return select("#",...) end
-print("unpack({})",unpack({}),"yo")
-print("unpack({})",ll(unpack({})),"yo")
-print("unpack({})",select("#",pT.unpack(pT.pack())),"yo")
+print("unpack({})",orig_unpack({}),"yo")
+print("unpack({})",ll(orig_unpack({})),"yo")
+print("unpack({})",select("#",list(pack())),"yo")
 
-local t10 = pT.pack(nil,1,nil,2,3,nil,4,nil)
+local t10 = pack(nil,1,nil,2,3,nil,4,nil)
 print("removeNils")
-pp(t10)
-pp(pT.removeNils(t10))
+app(t10)
+app(removeNils(t10))
 
-print("pT.pTableT")
-pp(pT.pTableT({a="a", b="b", 1,2,3,nil}, 4))
+print("pTableT")
+app(pTableT({a="a", b="b", 1,2,3,nil}, 4))
 
 print("setn/getn")
 t22 = {1,2,3,4}
@@ -167,88 +161,101 @@ print (#a,#b)
 --6       3
 
 print("mapPairs")
-m1 = pT.pTableT({1,2,3,a="A",b="B",4},4)
-pp(m1)
-for k,v in pT.mapPairs(m1) do print("k,v",k,v) end
+m1 = pTableT({1,2,3,a="A",b="B",4},4)
+app(m1)
+for k,v in mapPairs(m1) do print("k,v",k,v) end
 
 
-print("pT.arrayPairsSkipNil")
-local t33 = pT.pack("a","b",nil,"d",nil)
-for i,v in pT.arrayPairs(t33) do print(i,v) end 
-for i,v in pT.rarrayPairs(t33) do print(i,v) end 
-for i,v in pT.arrayPairsSkipNil(t33) do print(i,v) end 
-for i,v in pT.listPairs("a","b",nil,"d",nil) do print(i,v) end 
-for i,v in pT.listPairsSkipNil("a","b",nil,"d",nil) do print(i,v) end 
+print("arrayPairsSkipNil")
+local t33 = pack("a","b",nil,"d",nil)
+for i,v in arrayPairs(t33) do print(i,v) end 
+for i,v in rarrayPairs(t33) do print(i,v) end 
+for i,v in arrayPairsSkipNil(t33) do print(i,v) end 
+for i,v in listPairs("a","b",nil,"d",nil) do print(i,v) end 
+for i,v in listPairsSkipNil("a","b",nil,"d",nil) do print(i,v) end 
 
-t33.jaja=t10; t33.nee=pT.pack();t33.nee.janee=pT.pack();t33.nee.janee1=t33;t33[pT.pack()]=1
+t33.jaja=t10; t33.nee=pack();t33.nee.janee=pack();t33.nee.janee1=t33;t33[pack()]=1
 
-print("pT.deepCopy(t, trefs)")
+print("deepCopy(t, trefs)")
 for k,v in pairs(t33) do print(k,v) end
-local t44 = pT.deepCopy(t33)
+local t44 = deepCopy(t33)
 for k,v in pairs(t44) do print(k,v) end
 
-print("pT.deepCompare")
-print("t33==t44",pT.deepCompare(t33,t44))
+print("deepCompare")
+print("t33==t44",deepCompare(t33,t44))
 local d1 = {};d1["z"]=d1; d1[1]=d1;d1[2]=2
 local d2 = {};d2["z"]=d2; d2[1]=d2;d2[2]=2
-print("dC:",pT.deepCompare({2,{["a"]=4,d1}},{2,{["a"]=4,d2}}))
-print("dC:",pT.deepCompare(d1,d2))
+print("dC:",deepCompare({2,{["a"]=4,d1}},{2,{["a"]=4,d2}}))
+print("dC:",deepCompare(d1,d2))
 for k,v in pairs(d1) do print("kv:",k,v) end
-print("dC1:",pT.deepCompare({},{}))
+print("dC1:",deepCompare({},{}))
 
-print("pT.shallowCompare")
+print("compare")
 s1 = {}
 s10={1};s20={1};
 s10.ref=s10;s10[s10]="ja";s10[s10]=s10
 s20.ref=s20;s20[s20]="ja";s20[s20]=s20
-print("sC:",pT.shallowCompare({1,s1},{1,s1}))
-print("sC:",pT.shallowCompare(s10,s20))
+print("sC:",compare({1,s1},{1,s1}))
+print("sC:",compare(s10,s20))
 
-print("pT.arrayCopy")
-ac1=pT.pack(1,2,3,4,5,6,nil,8,nil)
+print("arrayCopy")
+ac1=pack(1,2,3,4,5,6,nil,8,nil)
 print(ac1)
-ac1["a"]="A";pT.insert(ac1,ac1)
-pp(ac1)
-ac2=pT.arrayCopy(ac1)
+ac1["a"]="A";insert(ac1,ac1)
+app(ac1)
+ac2=arrayCopy(ac1)
 print(ac2)
-pp(ac2)
+app(ac2)
 
 
 print("pT_i.assignGlobalsLocalsFunctionMap")
 print("\npT_i.assignGlobalsLocalsFunctionMap(pT)")
-local g,l,lt = pT_i.assignGlobalsLocalsFunctionMap(pT, "pT.")
+local g,l,m,lm = pT_i.assignGlobalsLocalsFunctionMap(pT, "pT.")
 print(g,"\n")
 print(l,"\n")
-print(lt,"\n")
+print(m,"\n")
+print(lm,"\n")
 print("\npT_i.assignGlobalsLocalsFunctionMap(pT_i)")
-local g,l,lt = pT_i.assignGlobalsLocalsFunctionMap(pT_i, "pT_i.")
+local g,l,m,lm = pT_i.assignGlobalsLocalsFunctionMap(pT_i, "pT_i.")
 print(g,"\n")
 print(l,"\n")
-print(lt,"\n")
+print(m,"\n")
+print(lm,"\n")
 
-print("pT.hasNilValues")
-local hnv = pT.pTable(1,2,nil)
-jpp(pT.hasNilValues(hnv))
-jpp(pT.hasNilValues(pT.aset(hnv,3,3)))
+print("agetT")
+local ta = pTable(1,2,3,4,nil,nil)
+app(agetT(ta,pTable(5,2,3),pTable(5,2,3,6)))
+app(pTable(nil,1,nil))
+
+
+print("hasNilValues")
+local hnv = pTable(1,2,nil)
+jpp(hasNilValues(hnv))
+jpp(hasNilValues(aset(hnv,3,3)))
 
 print("table.concat")
-print (table.concat(pT.pTable(1,2,3,"ja","nee",nil), ", "))
-print (table.concat(pT.removeNils(pT.pTable(1,2,nil,"ja","nee",nil)), ", ", 1, 4))
-print (table.concat(pT.pTable(1,2,nil,"ja","nee",nil), ", ", 1, 2))
---print (pT.concat(pT.pTable(1,2,nil,"ja","nee",nil), ", ", 2, 4))
+print (table.concat(pTable(1,2,3,"ja","nee",nil), ", "))
+print (table.concat(removeNils(pTable(1,2,nil,"ja","nee",nil)), ", ", 1, 4))
+print (table.concat(pTable(1,2,nil,"ja","nee",nil), ", ", 1, 2))
+--print (concat(pTable(1,2,nil,"ja","nee",nil), ", ", 2, 4))
 
 print("table.sort")
---local ts = pT.pTable(5,2,nil,4,1,nil)
-local ts = pT.pTable(5,2,4,1)
+--local ts = pTable(5,2,nil,4,1,nil)
+local ts = pTable(5,2,4,1)
 jpp("table.sort:",ts)
 table.sort(ts)
+jpp("table.sort:",ts)
+ts = pTableT({5,2,4,1,0},4)
+print(len(ts))
+jpp("table.sort:",ts)
+sort(ts)
 jpp("table.sort:",ts)
 --[[
-local ts = pT.removeNils(pT.pTable(5,2,nil,4,1,nil))
+local ts = removeNils(pTable(5,2,nil,4,1,nil))
 jpp("table.sort:",ts)
 table.sort(ts)
 jpp("table.sort:",ts)
-jpp (pT.sort(pT.pTable(5,2,nil,4,1,3,nil)))
+jpp (sort(pTable(5,2,nil,4,1,3,nil)))
 --]]
 
 print("table.insert")

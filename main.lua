@@ -16,7 +16,7 @@ local pp = json.pp
 local ppdb = json.ppdb
 
 --require("test")
-require("prudentTable-examples")
+local jaja = require("prudentTable-examples")
 
 --local pL = require("prudentList")
 
