@@ -1,11 +1,11 @@
-prudentTable.lua
+pTable.lua
 ================
 
-local pT = require("prudentTable")  -- this is assumed for all code-snippets in this doc.
+local pT = require("pTable")  -- this is assumed for all code-snippets in this doc.
 
-prudentTable is a Lua-module that attempts to facilitate consistent and save processing of array-related operations with Lua-tables.
+pTable is a Lua-module that attempts to facilitate consistent and save processing of array-related operations with Lua-tables.
 
-pTable is short for prudentTable and is used throughout the docs and code.
+pTable and pT are short for prudentTable and are used throughout the docs and code.
 
 With some effort, this module allows you to maintain an array-component of a Lua-table as if it is an pTable-array. It requires some discipline and care to keep the consistency, but it is definitely feasible. The one important rule for this is to stay away from the "#" as far as you can and not to use any of the standard library functions that may use it (like ipairs, insert, remove, etc.). This module will provide alternatives for all those suspect library functions.
 
